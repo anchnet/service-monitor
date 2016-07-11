@@ -1,0 +1,6 @@
+[submodule "mymon"]
+	path = mymon
+	url = https://github.com/open-falcon/mymon
+[submodule "swcollector"]
+	path = swcollector
+	url = https://github.com/gaochao1/swcollector

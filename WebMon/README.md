@@ -32,7 +32,7 @@
 
 ```
 [default]
-log_file=web-monitor.log
+log_file=./web-monitor.log
 # Panic 0
 # Fatal 1
 # Error 2
@@ -58,3 +58,21 @@ enabled=1
 staturl=http://127.0.0.1/status
 ```
 
+编译 WebMon
+
+```
+git clone https://github.com/51idc/service-monitor.git
+cd service-monitor/WebMon/
+go build -o WebMon
+```
+
+
+测试 WebMon，假定放在 /opt/webmon 下
+
+```
+/opt/webmon/WebMon -c /opt/webmon/WebMon.cfg
+```
+
+看下 log 是否运行正常
+
+丢进定时任务完事

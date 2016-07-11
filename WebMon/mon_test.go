@@ -5,6 +5,7 @@ import (
 )
 
 const (
+	url = "http://127.0.0.1/status"
 )
 
 func Test_nginx(t *testing.T) {

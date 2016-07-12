@@ -10,13 +10,15 @@ import (
 )
 
 type Cfg struct {
-	LogFile      string
-	LogLevel     int
-	PushUrl      string
-	Endpoint     string
-	NginxStatUrl string
-	NginxEnabled int
-	Interval     int
+	LogFile       string
+	LogLevel      int
+	PushUrl       string
+	Endpoint      string
+	NginxStatUrl  string
+	NginxEnabled  int
+	ApacheStatUrl string
+	ApacheEnabled int
+	Interval      int
 }
 
 var cfg Cfg
@@ -90,6 +92,16 @@ func (conf *Cfg) readConf(file string) error {
 	if err != nil {
 		return err
 	}
+
+	conf.ApacheEnabled, err = c.GetInt("apache", "enabled")
+	if err != nil {
+		return err
+	}
+
+	conf.ApacheStatUrl, err = c.GetString("apache", "staturl")
+	if err != nil {
+		return err
+	}
 	return err
 }
 
@@ -101,9 +113,11 @@ func timeout() {
 }
 
 func NginxAlive(url string, ok bool) {
-	data := NewMetric("nginx.alive")
+	data := NewMetric("Nginx.alive")
 	if ok {
 		data.SetValue(1)
+	} else {
+		data.SetValue(-1)
 	}
 	_, err := sendData([]*MetaData{data})
 	if err != nil {
@@ -111,6 +125,21 @@ func NginxAlive(url string, ok bool) {
 		return
 	}
 	log.Infof("Alive data response Nginx")
+}
+
+func ApacheAlive(url string, ok bool) {
+	data := NewMetric("Apache.alive")
+	if ok {
+		data.SetValue(1)
+	} else {
+		data.SetValue(-1)
+	}
+	_, err := sendData([]*MetaData{data})
+	if err != nil {
+		log.Errorf("Send alive data failed: %v", err)
+		return
+	}
+	log.Infof("Alive data response Apache")
 }
 
 func FetchNginxData(url string) (err error) {
@@ -127,12 +156,42 @@ func FetchNginxData(url string) (err error) {
 		log.Errorf("Http Statu Page Open Error")
 		return
 	}
-	nginxstat, err := nginx_status(respbody)
+	stat, err := nginx_status(respbody)
 	if err != nil {
 		log.Error(err)
 		return
 	}
-	data := nginx_data(nginxstat)
+	data := nginx_data(stat)
+
+	_, err = sendData(data)
+	if err != nil {
+		log.Error(err)
+		return
+	}
+	log.Infof("Send response")
+	return
+}
+
+func FetchApacheData(url string) (err error) {
+	defer func() {
+		ApacheAlive(url, err == nil)
+	}()
+
+	respbody, resp_code, err := httpGet(url)
+	if err != nil {
+		log.Error(err)
+		return
+	}
+	if resp_code != 200 {
+		log.Errorf("Http Statu Page Open Error")
+		return
+	}
+	stat, err := apache_status(respbody)
+	if err != nil {
+		log.Error(err)
+		return
+	}
+	data := apache_data(stat)
 
 	_, err = sendData(data)
 	if err != nil {
@@ -148,6 +207,12 @@ func main() {
 	go timeout()
 	if cfg.NginxEnabled == 1 {
 		err := FetchNginxData(cfg.NginxStatUrl)
+		if err != nil {
+			log.Error(err)
+		}
+	}
+	if cfg.ApacheEnabled == 1 {
+		err := FetchApacheData(cfg.ApacheStatUrl)
 		if err != nil {
 			log.Error(err)
 		}

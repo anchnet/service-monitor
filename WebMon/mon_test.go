@@ -7,7 +7,7 @@ import (
 const (
 	nginx_url  = "http://127.0.0.1/status"
 	apache_url = "https://www.apache.org/server-status?auto"
-	tomcat_url = "http://idptest.ecnu.edu.cn:8080/manager/status?XML=true"
+	tomcat_url = "http://127.0.0.1:8080/manager/status?XML=true"
 	username   = "admin"
 	password   = "manager"
 )

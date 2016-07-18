@@ -159,6 +159,7 @@ password=manager
 ```
 git clone https://github.com/51idc/service-monitor.git
 cd service-monitor/WebMon/
+go get ./...
 go build -o WebMon
 ```
 

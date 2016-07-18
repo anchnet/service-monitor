@@ -16,6 +16,7 @@
 |Nginx.ServerWriting|/|GAUGE|写的 worker 数|
 
 #### Apache
+视版本不同，采集到的 Metric 可能有所差别。
 
 --------------------------------
 | key |  tag | type | note |
@@ -45,6 +46,32 @@
 |Apache.Idle_cleanup_of_worker|/|GUAGE|Idle cleanup of worker|
 |Apache.Open_slot_with_no_current_process|/|GUAGE|Open slot with no current process|
 
+#### Tomcat
+视版本不同，采集到的 Metric 可能有所差别。
+--------------------------------
+| key |  tag | type | note |
+|-----|------|------|------|
+|Tomcat.Jvm.Memory.Free|/|GAUGE|Jvm.Memory.Free|
+|Tomcat.Jvm.Memory.Total|/|GAUGE|Jvm.Memory.Total|
+|Tomcat.Jvm.Memory.Max|/|GAUGE|Jvm.Memory.Max|
+|Tomcat.Jvm.Memory.usage|/|GAUGE|(Total-Free)/Total|
+|Tomcat.Jvm.Memorypool.Initial|Name=Name,Type=Type|GAUGE|Jvm.Memorypool.Initial|
+|Tomcat.Jvm.Memorypool.Committed|Name=Name,Type=Type|GAUGE|Jvm.Memorypool.Committed|
+|Tomcat.Jvm.Memorypool.Max|Name=Name,Type=Type|GAUGE|Jvm.Jvm.Memorypool.Max|
+|Tomcat.Jvm.Memorypool.Used|Name=Name,Type=Type|GAUGE|Jvm.Jvm.Memorypool.Used|
+|Tomcat.Jvm.Memorypool.Usage|Name=Name,Type=Type|GAUGE|Usage/Max|
+|Tomcat.Connector.ThreadInfo.MaxThreads|Connector=Connector|GAUGE|Connector.ThreadInfo.MaxThreads|
+|Tomcat.Connector.ThreadInfo.CurrentThreadCount|Connector=Connector|GAUGE|Connector.ThreadInfo.CurrentThreadCount|
+|Tomcat.Connector.ThreadInfo.CurrentThreadsBusy|Connector=Connector|GAUGE|Connector.ThreadInfo.CurrentThreadsBusy|
+|Tomcat.Connector.RequestInfo.MaxTime|Connector=Connector|GAUGE|Connector.RequestInfo.MaxTime|
+|Tomcat.Connector.RequestInfo.RequestCount|Connector=Connector|COUNTER|Connector.RequestInfo.RequestCount|
+|Tomcat.Connector.RequestInfo.ErrorCount|Connector=Connector|COUNTER|Connector.RequestInfo.ErrorCount|
+|Tomcat.Connector.RequestInfo.BytesReceived|Connector=Connector|COUNTER|Connector.RequestInfo.BytesReceived|
+|Tomcat.Connector.RequestInfo.BytesSent|Connector=Connector|COUNTER|Connector.RequestInfo.BytesSent|
+
+
+
+
 #### 使用方式
 #### Nginx
 先配置 Nginx ，开启状态监控页
@@ -69,12 +96,24 @@
 </location>
 ExtendedStatus On
 ```
+#### Tomcat
+先配置 Tomcat， 为状态监控页增加一个用户
+修改 `$TOMCAT_HOME/conf/tomcat_user.xml`
+在 `<tomcat-users>` 标签下增加一个 `manger-gui` 用户
+```
+<tomcat-users>
+……
+<role rolename="manager-gui"/>
+<user username="admin" password="manager" roles="manager-gui"/>
+……
+</tomcat-users>
+```
 
 修改 WebMon.cfg 
 
 ```
 [default]
-log_file=./web-monitor.log
+log_file=web-monitor.log
 # Panic 0
 # Fatal 1
 # Error 2
@@ -84,8 +123,8 @@ log_file=./web-monitor.log
 log_level=5
 
 pushurl=http://127.0.0.1:1988/v1/push
-#推 agent 到:1988/v1/push
-#推 transfer 到:6060/api/push
+#agent http://agent:1988/v1/push
+#transfer 到http://transfer:/6060/api/push
 
 #上报的频率，单位为秒，需和脚本的运行频率设置一致
 interval=60
@@ -105,6 +144,14 @@ staturl=http://127.0.0.1/status
 enabled=1
 
 staturl=https://www.apache.org/server-status?auto
+
+[tomcat]
+#enable 1,disable 0
+enabled=1
+
+staturl=http://127.0.0.1:8080/manager/status?XML=true
+username=admin
+password=manager
 ```
 
 编译 WebMon

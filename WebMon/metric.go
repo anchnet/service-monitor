@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	TIME_OUT = 5
+	TIME_OUT = 45
 
 	GUAGE   = "GAUGE"
 	COUNTER = "COUNTER"
@@ -17,36 +17,54 @@ const (
 // COUNTER: Speed per second
 // GAUGE: Original, DEFAULT
 var DataType = map[string]string{
-	"Nginx.ActiveConn":                         GUAGE,
-	"Nginx.ServerAccepts":                      COUNTER,
-	"Nginx.ServerHandled":                      COUNTER,
-	"Nginx.ServerRequests":                     COUNTER,
-	"Nginx.ServerWaiting":                      GUAGE,
-	"Nginx.ServerWriting":                      GUAGE,
-	"Apache.Total_Accesses":                    GUAGE,
-	"Apache.Total_kBytes":                      GUAGE,
-	"Apache.CPULoad":                           GUAGE,
-	"Apache.Uptime":                            GUAGE,
-	"Apache.ReqPerSec":                         GUAGE,
-	"Apache,BytesPerSec":                       GUAGE,
-	"Apache.BytesPerReq":                       GUAGE,
-	"Apache.BusyWorkers":                       GUAGE,
-	"Apache.IdleWorkers":                       GUAGE,
-	"Apache.ConnsTotal":                        GUAGE,
-	"Apache.ConnsAsyncWriting":                 GUAGE,
-	"Apache.ConnsAsyncKeepAlive":               GUAGE,
-	"Apache.ConnsAsyncClosing":                 GUAGE,
-	"Apache.Waiting_for_Connection":            GUAGE,
-	"Apache.Starting_up":                       GUAGE,
-	"Apache.Reading_Request":                   GUAGE,
-	"Apache.Sending_Reply":                     GUAGE,
-	"Apache.Keepalive_read":                    GUAGE,
-	"Apache.DNS_Lookup":                        GUAGE,
-	"Apache.Closing_connection":                GUAGE,
-	"Apache.Logging":                           GUAGE,
-	"Apache.Gracefully_Finishing":              GUAGE,
-	"Apache.Idle_Cleanup_of_worker":            GUAGE,
-	"Apache.Open_slot_with_no_current_process": GUAGE,
+	"Nginx.ActiveConn":                               GUAGE,
+	"Nginx.ServerAccepts":                            COUNTER,
+	"Nginx.ServerHandled":                            COUNTER,
+	"Nginx.ServerRequests":                           COUNTER,
+	"Nginx.ServerWaiting":                            GUAGE,
+	"Nginx.ServerWriting":                            GUAGE,
+	"Apache.Total_Accesses":                          GUAGE,
+	"Apache.Total_kBytes":                            GUAGE,
+	"Apache.CPULoad":                                 GUAGE,
+	"Apache.Uptime":                                  GUAGE,
+	"Apache.ReqPerSec":                               GUAGE,
+	"Apache,BytesPerSec":                             GUAGE,
+	"Apache.BytesPerReq":                             GUAGE,
+	"Apache.BusyWorkers":                             GUAGE,
+	"Apache.IdleWorkers":                             GUAGE,
+	"Apache.ConnsTotal":                              GUAGE,
+	"Apache.ConnsAsyncWriting":                       GUAGE,
+	"Apache.ConnsAsyncKeepAlive":                     GUAGE,
+	"Apache.ConnsAsyncClosing":                       GUAGE,
+	"Apache.Waiting_for_Connection":                  GUAGE,
+	"Apache.Starting_up":                             GUAGE,
+	"Apache.Reading_Request":                         GUAGE,
+	"Apache.Sending_Reply":                           GUAGE,
+	"Apache.Keepalive_read":                          GUAGE,
+	"Apache.DNS_Lookup":                              GUAGE,
+	"Apache.Closing_connection":                      GUAGE,
+	"Apache.Logging":                                 GUAGE,
+	"Apache.Gracefully_Finishing":                    GUAGE,
+	"Apache.Idle_Cleanup_of_worker":                  GUAGE,
+	"Apache.Open_slot_with_no_current_process":       GUAGE,
+	"Tomcat.Jvm.Memory.Free":                         GUAGE,
+	"Tomcat.Jvm.Memory.Total":                        GUAGE,
+	"Tomcat.Jvm.Memory.Max":                          GUAGE,
+	"Tomcat.Jvm.Memory.usage":                        GUAGE,
+	"Tomcat.Jvm.Memorypool.Initial":                  GUAGE,
+	"Tomcat.Jvm.Memorypool.Committed":                GUAGE,
+	"Tomcat.Jvm.Memorypool.Max":                      GUAGE,
+	"Tomcat.Jvm.Memorypool.Used":                     GUAGE,
+	"Tomcat.Jvm.Memorypool.Usage":                    GUAGE,
+	"Tomcat.Connector.ThreadInfo.MaxThreads":         GUAGE,
+	"Tomcat.Connector.ThreadInfo.CurrentThreadCount": GUAGE,
+	"Tomcat.Connector.ThreadInfo.CurrentThreadsBusy": GUAGE,
+	"Tomcat.Connector.RequestInfo.MaxTime":           GUAGE,
+	"Tomcat.Connector.RequestInfo.ProcessingTime":    GUAGE,
+	"Tomcat.Connector.RequestInfo.RequestCount":      COUNTER,
+	"Tomcat.Connector.RequestInfo.ErrorCount":        COUNTER,
+	"Tomcat.Connector.RequestInfo.BytesReceived":     COUNTER,
+	"Tomcat.Connector.RequestInfo.BytesSent":         COUNTER,
 }
 
 func dataType(key_ string) string {
@@ -97,4 +115,8 @@ func hostname() string {
 
 func (m *MetaData) SetValue(v interface{}) {
 	m.Value = v
+}
+
+func (m *MetaData) SetTags(v string) {
+	m.Tags = v
 }

@@ -10,15 +10,19 @@ import (
 )
 
 type Cfg struct {
-	LogFile       string
-	LogLevel      int
-	PushUrl       string
-	Endpoint      string
-	NginxStatUrl  string
-	NginxEnabled  int
-	ApacheStatUrl string
-	ApacheEnabled int
-	Interval      int
+	LogFile        string
+	LogLevel       int
+	PushUrl        string
+	Endpoint       string
+	NginxStatUrl   string
+	NginxEnabled   int
+	ApacheStatUrl  string
+	ApacheEnabled  int
+	TomcatEnabled  int
+	TomcatStatUrl  string
+	TomcatUsername string
+	TomcatPassword string
+	Interval       int
 }
 
 var cfg Cfg
@@ -102,6 +106,26 @@ func (conf *Cfg) readConf(file string) error {
 	if err != nil {
 		return err
 	}
+	conf.TomcatEnabled, err = c.GetInt("tomcat", "enabled")
+	if err != nil {
+		return err
+	}
+
+	conf.TomcatStatUrl, err = c.GetString("tomcat", "staturl")
+	if err != nil {
+		return err
+	}
+
+	conf.TomcatUsername, err = c.GetString("tomcat", "username")
+	if err != nil {
+		return err
+	}
+
+	conf.TomcatPassword, err = c.GetString("tomcat", "password")
+	if err != nil {
+		return err
+	}
+
 	return err
 }
 
@@ -125,6 +149,21 @@ func NginxAlive(url string, ok bool) {
 		return
 	}
 	log.Infof("Alive data response Nginx")
+}
+
+func TomcatAlive(url string, ok bool) {
+	data := NewMetric("Tomcat.alive")
+	if ok {
+		data.SetValue(1)
+	} else {
+		data.SetValue(-1)
+	}
+	_, err := sendData([]*MetaData{data})
+	if err != nil {
+		log.Errorf("Send alive data failed: %v", err)
+		return
+	}
+	log.Infof("Alive data response Tomcat")
 }
 
 func ApacheAlive(url string, ok bool) {
@@ -202,6 +241,36 @@ func FetchApacheData(url string) (err error) {
 	return
 }
 
+func FetchTomcatData(username string, password string, url string) (err error) {
+	defer func() {
+		TomcatAlive(url, err == nil)
+	}()
+
+	respbody, resp_code, err := TomcathttpGet(username, password, url)
+	if err != nil {
+		log.Error(err)
+		return
+	}
+	if resp_code != 200 {
+		log.Errorf("Http Statu Page Open Error")
+		return
+	}
+	stat, err := xml_struct(respbody)
+	if err != nil {
+		log.Error(err)
+		return
+	}
+	data := tomcat_data(stat)
+
+	_, err = sendData(data)
+	if err != nil {
+		log.Error(err)
+		return
+	}
+	log.Infof("Send response")
+	return
+}
+
 func main() {
 	log.Info("Web Monitor for falcon")
 	go timeout()
@@ -213,6 +282,12 @@ func main() {
 	}
 	if cfg.ApacheEnabled == 1 {
 		err := FetchApacheData(cfg.ApacheStatUrl)
+		if err != nil {
+			log.Error(err)
+		}
+	}
+	if cfg.TomcatEnabled == 1 {
+		err := FetchTomcatData(cfg.TomcatUsername, cfg.TomcatPassword, cfg.TomcatStatUrl)
 		if err != nil {
 			log.Error(err)
 		}

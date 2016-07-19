@@ -14,6 +14,7 @@ type Cfg struct {
 	LogLevel      int
 	PushUrl       string
 	Endpoint      string
+	SmartAPI      string
 	NginxStatUrl  string
 	NginxEnabled  int
 	ApacheStatUrl string
@@ -74,6 +75,11 @@ func (conf *Cfg) readConf(file string) error {
 	}
 
 	conf.Endpoint, err = c.GetString("default", "endpoint")
+	if err != nil {
+		return err
+	}
+
+	conf.SmartAPI, err = c.GetString("default", "smart_api")
 	if err != nil {
 		return err
 	}
@@ -204,6 +210,9 @@ func FetchApacheData(url string) (err error) {
 
 func main() {
 	log.Info("Web Monitor for falcon")
+
+	ReportVersion()
+
 	go timeout()
 	if cfg.NginxEnabled == 1 {
 		err := FetchNginxData(cfg.NginxStatUrl)

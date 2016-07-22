@@ -9,6 +9,8 @@ func CheckCollector() {
 	output := make(map[string]bool)
 
 	output["NginxMetrics"] = len(NginxMetrics()) > 0
+	output["ApacheMetrics"] = len(ApacheMetrics()) > 0
+	output["TomcatMetrics"] = len(TomcatMetrics()) > 0
 
 	for k, v := range output {
 		status := "fail"

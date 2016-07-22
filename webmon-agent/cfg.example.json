@@ -13,7 +13,7 @@
 		"enabled": true,
 		"staturl": "http://127.0.0.1:8080/manager/status?XML=true",
 		"username": "admin",
-		"password": "admin"
+		"password": "manager"
  	}, 
     "transfer": {
         "enabled": true,

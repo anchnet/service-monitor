@@ -70,6 +70,9 @@ func tomcat_version(username string, password string, url string) (string, error
 	if err != nil {
 		return "", err
 	}
+	if resp.StatusCode != 200 {
+		return "", err
+	}
 
 	d, err := goquery.NewDocumentFromResponse(resp)
 	if err != nil {
@@ -90,6 +93,9 @@ func tomcat_uptime(username string, password string, url string) (int64, error) 
 
 	resp, err := client.Do(req)
 	if err != nil {
+		return 0, err
+	}
+	if resp.StatusCode != 200 {
 		return 0, err
 	}
 
@@ -205,15 +211,16 @@ func TomcatMetrics() (L []*model.MetricValue) {
 	}
 	if stat.Connector != nil {
 		for _, v := range stat.Connector {
-			L = append(L, GaugeValue("Tomcat.Connector.ThreadInfo.MaxThreads", v.ThreadInfo.MaxThreads, "Connector="+v.Name))
-			L = append(L, GaugeValue("Tomcat.Connector.ThreadInfo.CurrentThreadCount", v.ThreadInfo.CurrentThreadCount, "Connector="+v.Name))
-			L = append(L, GaugeValue("Tomcat.Connector.ThreadInfo.CurrentThreadsBusy", v.ThreadInfo.CurrentThreadsBusy, "Connector="+v.Name))
-			L = append(L, GaugeValue("Tomcat.Connector.RequestInfo.MaxTime", v.RequestInfo.MaxTime, "Connector="+v.Name))
-			L = append(L, GaugeValue("Tomcat.Connector.RequestInfo.ProcessingTime", v.RequestInfo.ProcessingTime, "Connector="+v.Name))
-			L = append(L, CounterValue("Tomcat.Connector.RequestInfo.RequestCount", v.RequestInfo.RequestCount, "Connector="+v.Name))
-			L = append(L, CounterValue("Tomcat.Connector.RequestInfo.ErrorCount", v.RequestInfo.ErrorCount, "Connector="+v.Name))
-			L = append(L, CounterValue("Tomcat.Connector.RequestInfo.BytesReceived", v.RequestInfo.BytesReceived, "Connector="+v.Name))
-			L = append(L, CounterValue("Tomcat.Connector.RequestInfo.BytesSent", v.RequestInfo.BytesSent, "Connector="+v.Name))
+			Connector := strings.Trim(v.Name, `"`)
+			L = append(L, GaugeValue("Tomcat.Connector.ThreadInfo.MaxThreads", v.ThreadInfo.MaxThreads, "Connector="+Connector))
+			L = append(L, GaugeValue("Tomcat.Connector.ThreadInfo.CurrentThreadCount", v.ThreadInfo.CurrentThreadCount, "Connector="+Connector))
+			L = append(L, GaugeValue("Tomcat.Connector.ThreadInfo.CurrentThreadsBusy", v.ThreadInfo.CurrentThreadsBusy, "Connector="+Connector))
+			L = append(L, GaugeValue("Tomcat.Connector.RequestInfo.MaxTime", v.RequestInfo.MaxTime, "Connector="+Connector))
+			L = append(L, GaugeValue("Tomcat.Connector.RequestInfo.ProcessingTime", v.RequestInfo.ProcessingTime, "Connector="+Connector))
+			L = append(L, CounterValue("Tomcat.Connector.RequestInfo.RequestCount", v.RequestInfo.RequestCount, "Connector="+Connector))
+			L = append(L, CounterValue("Tomcat.Connector.RequestInfo.ErrorCount", v.RequestInfo.ErrorCount, "Connector="+Connector))
+			L = append(L, CounterValue("Tomcat.Connector.RequestInfo.BytesReceived", v.RequestInfo.BytesReceived, "Connector="+Connector))
+			L = append(L, CounterValue("Tomcat.Connector.RequestInfo.BytesSent", v.RequestInfo.BytesSent, "Connector="+Connector))
 		}
 	}
 

@@ -31,6 +31,9 @@ func apache_version(url string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	if resp.StatusCode != 200 {
+		return "", err
+	}
 
 	d, err := goquery.NewDocumentFromResponse(resp)
 	if err != nil {

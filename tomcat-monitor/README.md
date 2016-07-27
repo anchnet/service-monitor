@@ -1,37 +1,50 @@
-## Nginx-Monitor-agent
+## Tomcat-Monitor-agent
 
-通过监控 Nginx 自带的 statu 页面，采集相关信息上报给 open-falcon
+通过监控 Tomcat 自带的 statu 页面，采集相关信息上报给 open-falcon
 
 version 信息上报给 smartAPI
 
 以 agent 形式运行，提供简单的 http 信息维护接口
 
 #### 上报字段
+视版本不同，采集到的 Metric 可能有所差别。
+
 --------------------------------
 | key |  tag | type | note |
 |-----|------|------|------|
-|Nginx.Monitor.alive|/|GUAGE|监控 agent 的存活状态|
-|Nginx.Uptime|/|GUAGE|运行时长|
-|Nginx.ActiveConn|/|GAUGE|当前活跃连接数|
-|Nginx.ServerAccepts|/|COUNTER|请求成功数|
-|Nginx.ServerHandled|/|COUNTER|请求挂起数|
-|Nginx.ServerRequests|/|COUNTER|请求数 |
-|Nginx.ServerReading|/|GAUGE|读的 worker 数|
-|Nginx.ServerWaiting|/|GAUGE|等待请求的 worker 数|
-|Nginx.ServerWriting|/|GAUGE|写的 worker 数|
+|Tomcat.Monitor.alive|/|GUAGE|监控 agent 存活状态|
+|Tomcat.Uptime|/|GUAGE|Tomcat Uptime|
+|Tomcat.Jvm.Memory.Free|/|GAUGE|Jvm.Memory.Free|
+|Tomcat.Jvm.Memory.Total|/|GAUGE|Jvm.Memory.Total|
+|Tomcat.Jvm.Memory.Max|/|GAUGE|Jvm.Memory.Max|
+|Tomcat.Jvm.Memory.usage|/|GAUGE|(Total-Free)/Total|
+|Tomcat.Jvm.Memorypool.Initial|Name=Name,Type=Type|GAUGE|Jvm.Memorypool.Initial|
+|Tomcat.Jvm.Memorypool.Committed|Name=Name,Type=Type|GAUGE|Jvm.Memorypool.Committed|
+|Tomcat.Jvm.Memorypool.Max|Name=Name,Type=Type|GAUGE|Jvm.Jvm.Memorypool.Max|
+|Tomcat.Jvm.Memorypool.Used|Name=Name,Type=Type|GAUGE|Jvm.Jvm.Memorypool.Used|
+|Tomcat.Jvm.Memorypool.Usage|Name=Name,Type=Type|GAUGE|Usage/Max|
+|Tomcat.Connector.ThreadInfo.MaxThreads|Connector=Connector|GAUGE|Connector.ThreadInfo.MaxThreads|
+|Tomcat.Connector.ThreadInfo.CurrentThreadCount|Connector=Connector|GAUGE|Connector.ThreadInfo.CurrentThreadCount|
+|Tomcat.Connector.ThreadInfo.CurrentThreadsBusy|Connector=Connector|GAUGE|Connector.ThreadInfo.CurrentThreadsBusy|
+|Tomcat.Connector.RequestInfo.MaxTime|Connector=Connector|GAUGE|Connector.RequestInfo.MaxTime|
+|Tomcat.Connector.RequestInfo.RequestCount|Connector=Connector|COUNTER|Connector.RequestInfo.RequestCount|
+|Tomcat.Connector.RequestInfo.ErrorCount|Connector=Connector|COUNTER|Connector.RequestInfo.ErrorCount|
+|Tomcat.Connector.RequestInfo.BytesReceived|Connector=Connector|COUNTER|Connector.RequestInfo.BytesReceived|
+|Tomcat.Connector.RequestInfo.BytesSent|Connector=Connector|COUNTER|Connector.RequestInfo.BytesSent|
 
 
 #### 使用方式
-先配置 Nginx ，开启状态监控页
-修改 nginx.conf 增加如下配置
+先配置 Tomcat， 为状态监控页增加一个用户
+修改 `$TOMCAT_HOME/conf/tomcat_user.xml`
+在 `<tomcat-users>` 标签下增加一个 `manger-gui` 用户
 ```
-      location /status {
-              stub_status on;
-              access_log /var/log/nginx/status.log;
-              auth_basic "NginxStatus";
-      }
+<tomcat-users>
+……
+<role rolename="manager-gui"/>
+<user username="admin" password="manager" roles="manager-gui"/>
+……
+</tomcat-users>
 ```
-
 
 配置文件请参照cfg.example.json，修改该文件名为cfg.json
 
@@ -39,10 +52,11 @@ version 信息上报给 smartAPI
 {
 	"debug": true,
 	"hostname": "", #上报的 endpoint 名，如为空则是主机名
-	"nginx":{
+	"tomcat":{
 		"enabled": true,
-		"staturl": "http://127.0.0.1/status",
-		"pid": "/var/run/nginx.pid"
+		"staturl": "http://127.0.0.1:8080/manager/status?XML=true",
+		"username": "admin",
+		"password": "manager"
  	}, 
 	"smartAPI": {
 		"enabled": true,
@@ -81,7 +95,7 @@ curl http://127.0.0.1:1990/config
 #### 源码安装
 
 ```
-cd $GOPATH/src/github.com/51idc/service-monitor/nginx-monitor/
+cd $GOPATH/src/github.com/51idc/service-monitor/tomcat-monitor/
 go get ./...
 chmod +x control
 ./control build
@@ -103,5 +117,5 @@ chmod +x control
 #### 验证
 
 ```
-./falcon-nginx-monitor --check
+./falcon-tomcat-monitor --check
 ```

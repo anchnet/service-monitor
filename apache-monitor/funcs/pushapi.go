@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/51idc/service-monitor/nginx-monitor/g"
+	"github.com/51idc/service-monitor/apache-monitor/g"
 )
 
 type smartAPI_Data struct {

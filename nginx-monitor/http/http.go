@@ -6,6 +6,7 @@ import (
 	"net/http"
 	_ "net/http/pprof"
 
+	"github.com/51idc/service-monitor/nginx-monitor/g"
 )
 
 type Dto struct {

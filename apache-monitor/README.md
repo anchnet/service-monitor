@@ -12,6 +12,7 @@ version 信息上报给 smartAPI
 --------------------------------
 | key |  tag | type | note |
 |-----|------|------|------|
+|Apache.Monitor.alive|/|GUAGE|监控 agent 存活状态|
 |Apache.Total_Access|/|GAUGE|总访问数|
 |Apache.Total_kBytes|/|GUAGE|总数据量，单位为 kb|
 |Apache.CPULoad|/|GUAGE|CPU 负载|

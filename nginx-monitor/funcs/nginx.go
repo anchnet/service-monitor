@@ -117,11 +117,14 @@ func NginxMetrics() (L []*model.MetricValue) {
 	}
 	url := g.Config().Nginx.Staturl
 	pid := g.Config().Nginx.Pid
+	debug := g.Config().Debug
+	smartAPI_url := g.Config().SmartAPI.Url
 
 	if g.Config().SmartAPI.Enabled {
+		endpoint, err := g.Hostname()
 		version, err := nginx_version()
 		if err == nil {
-			smartAPI_Push(g.Config().SmartAPI.Url, version)
+			smartAPI_Push(smartAPI_url, endpoint, version, debug)
 		} else {
 			log.Println(err)
 		}

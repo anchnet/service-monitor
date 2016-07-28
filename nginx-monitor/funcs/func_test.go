@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	pushurl   = "http://127.0.0.1/api/sevice/version"
+	pushurl   = "http://127.0.0.1/api/service/version"
 	nginx_url = "http://127.0.0.1/status"
 	pid       = "/var/run/nginx.pid"
 )
@@ -27,11 +27,9 @@ func Test_nginx(t *testing.T) {
 	}
 }
 
-func Test_SendData(t *testing.T) {
-	var data smartAPI_Data
-	data.Endpoint = "qfeng-pc"
-	data.Version = "1.1.1"
-	res, err := sendData(pushurl, data)
-	t.Log("res: ", res)
-	t.Error(err)
+func Test_smartAPI_Push(t *testing.T) {
+	endpoint := "test"
+	version := "1.1.1"
+	smartAPI_Push(pushurl, endpoint, version, true)
+
 }

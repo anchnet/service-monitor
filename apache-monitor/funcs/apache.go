@@ -91,11 +91,14 @@ func ApacheMetrics() (L []*model.MetricValue) {
 	url := g.Config().Apache.Staturl
 	url = strings.Split(url, "?")[0]
 	staturl := url + "?auto"
+	debug := g.Config().Debug
+	smartAPI_url := g.Config().SmartAPI.Url
 
 	if g.Config().SmartAPI.Enabled {
+		endpoint, err := g.Hostname()
 		version, err := apache_version(url)
 		if err == nil {
-			smartAPI_Push(g.Config().SmartAPI.Url, version)
+			smartAPI_Push(smartAPI_url, endpoint, version, debug)
 		} else {
 			log.Println(err)
 		}

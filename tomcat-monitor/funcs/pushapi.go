@@ -3,41 +3,47 @@ package funcs
 import (
 	"bytes"
 	"encoding/json"
+	"io/ioutil"
 	"log"
 	"net/http"
-
-	"github.com/51idc/service-monitor/tomcat-monitor/g"
 )
 
 type smartAPI_Data struct {
-	Endpoint string
-	Version  string
+	Endpoint string `json:"endpoint"`
+	Version  string `json:"version"`
 }
 
-func sendData(url string, data smartAPI_Data) (int, error) {
+type smartAPI_Result struct {
+	Status  string `json:"status"`
+	Message string `json:"message"`
+}
+
+func sendData(url string, data smartAPI_Data) ([]byte, int, error) {
 
 	js, err := json.Marshal(data)
 	if err != nil {
-		return 0, err
+		return nil, 0, err
 	}
 	res, err := http.Post(url, "Content-Type: application/json", bytes.NewBuffer(js))
 	if err != nil {
-		return 0, err
+		return nil, 0, err
 	}
-	defer res.Body.Close()
-	return res.StatusCode, err
-}
-
-func smartAPI_Push(url string, version string) {
-	var data smartAPI_Data
-	endpoint, err := g.Hostname()
+	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		log.Println(err)
-		return
+		return nil, 0, err
 	}
+	defer res.Body.Close()
+	return body, res.StatusCode, err
+}
+
+func smartAPI_Push(url string, endpoint string, version string, debug bool) {
+	var data smartAPI_Data
+	var result smartAPI_Result
+
 	data.Endpoint = endpoint
 	data.Version = version
-	res, err := sendData(g.Config().SmartAPI.Url, data)
+	body, res, err := sendData(url, data)
 	if err != nil {
 		log.Println(err)
 		return
@@ -46,8 +52,18 @@ func smartAPI_Push(url string, version string) {
 		log.Println("smartAPI error,statcode= ", res)
 		return
 	}
-	if g.Config().Debug {
-		log.Println("Version: ", version)
+
+	err = json.Unmarshal(body, &result)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	if result.Status != "ok" {
+		log.Println("SmartAPI return error: ", result.Message)
+		return
+	}
+	if debug {
+		log.Println("Push Version to SmartAPI Success: ", version)
 	}
 	return
 }

@@ -111,10 +111,13 @@ func RedisMetrics() (L []*model.MetricValue) {
 	}
 	keyspace_hits, err := strconv.ParseFloat(Redis_Info["keyspace_hits"], 64)
 	keyspace_misses, err := strconv.ParseFloat(Redis_Info["keyspace_misses"], 64)
-	if err == nil {
+	if err == nil && (keyspace_hits+keyspace_misses) != 0 {
 		keyspace_hit_rat := keyspace_hits / (keyspace_hits + keyspace_misses)
 		keyspace_hit_ratio := int(keyspace_hit_rat * 100)
-		L = append(L, GaugeValue("Redis.keyspace_hit_ratiot", keyspace_hit_ratio, "Port="+Port))
+		L = append(L, GaugeValue("Redis.keyspace_hit_ratio", keyspace_hit_ratio, "Port="+Port))
+	} else {
+		L = append(L, GaugeValue("Redis.keyspace_hit_ratio", 0, "Port="+Port))
 	}
+
 	return
 }

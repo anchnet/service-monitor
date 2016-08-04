@@ -1,0 +1,24 @@
+{
+	"debug": true,
+	"hostname": "",
+	"iis":{
+		"enabled": true,
+		"websites": [
+	        "Default Web Site"
+	    ]
+ 	}, 
+	"smartAPI": {
+		"enabled": true,
+		"url": "http://127.0.0.1/api/sevice/version"
+	},
+    "transfer": {
+        "enabled": true,
+        "addr": "127.0.0.1:8433",
+        "interval": 60,
+        "timeout": 1000
+    },
+    "http": {
+        "enabled": true,
+        "listen": ":1990"
+    }
+}

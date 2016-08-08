@@ -32,6 +32,7 @@ version 信息上报给 smartAPI
 ```
 {
 	"debug": true,
+	"logfile": "iis.log",
 	"hostname": "",
 	"iis":{
 		"enabled": true,

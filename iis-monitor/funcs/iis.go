@@ -9,8 +9,6 @@ import (
 	"strings"
 	"time"
 
-	"strconv"
-
 	"github.com/toolkits/file"
 
 	"github.com/51idc/service-monitor/iis-monitor/g"
@@ -30,32 +28,12 @@ type iis struct {
 }
 
 func iis_status(site string, counter string) (float64, error) {
-	cmd := exec.Command("powershell", "Import-Module", "WebAdministration")
-	err := cmd.Run()
+	hostname, err := os.Hostname()
 	if err != nil {
 		return 0, err
 	}
-	counter = `"` + counter + `"`
-	site = `"` + site + `"`
-	hostname, _ := os.Hostname()
-	cmd = exec.Command("powershell", "scrips/get_iis_status.ps1", hostname, site, counter)
-	out, err := cmd.Output()
-	if err != nil {
-		reader := bufio.NewReader(bytes.NewBuffer(out))
-		line, _ := file.ReadLine(reader)
-		log.Println(string(line))
-		return 0, err
-	}
-
-	reader := bufio.NewReader(bytes.NewBuffer(out))
-	line, err := file.ReadLine(reader)
-	if err != nil {
-		return 0, err
-	}
-	value, err := strconv.ParseFloat(string(line), 64)
-	if err != nil {
-		return 0, err
-	}
+	Counter := `\\` + hostname + `\web service(` + site + `)\` + counter
+	value, err := ReadPerformanceCounter(Counter)
 	return value, err
 }
 

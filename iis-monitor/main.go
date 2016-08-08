@@ -24,7 +24,7 @@ func main() {
 	}
 
 	g.ParseConfig(*cfg)
-
+	g.InitLog()
 	g.InitRootDir()
 	g.InitRpcClients()
 

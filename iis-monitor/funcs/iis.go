@@ -96,7 +96,7 @@ func iis_version() (string, error) {
 
 func iisMetrics() (L []*model.MetricValue) {
 	if !g.Config().IIs.Enabled {
-		log.Println("IIs Monitor is disabled")
+		g.Logger().Println("IIs Monitor is disabled")
 		return
 	}
 	websites := g.Config().IIs.Websites
@@ -110,7 +110,7 @@ func iisMetrics() (L []*model.MetricValue) {
 			version := result
 			smartAPI_Push(smartAPI_url, endpoint, version, debug)
 		} else {
-			log.Println(err, result)
+			g.Logger().Println(err, result)
 		}
 	}
 
@@ -140,6 +140,6 @@ func iisMetrics() (L []*model.MetricValue) {
 		}
 	}
 	endTime := time.Now()
-	log.Printf("IIsStats Collect complete. Process time %s.", endTime.Sub(startTime))
+	g.Logger().Println("IIsStats Collect complete. Process time %s.", endTime.Sub(startTime))
 	return
 }

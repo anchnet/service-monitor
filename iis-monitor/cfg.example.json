@@ -1,5 +1,6 @@
 {
 	"debug": true,
+	"logfile": "iis.log",
 	"hostname": "",
 	"iis":{
 		"enabled": true,

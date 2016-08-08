@@ -8,7 +8,10 @@ import (
 	"github.com/open-falcon/common/model"
 )
 
-var Root string
+var (
+	Root   string
+	logger *log.Logger
+)
 
 func InitRootDir() {
 	var err error
@@ -16,6 +19,22 @@ func InitRootDir() {
 	if err != nil {
 		log.Fatalln("getwd fail:", err)
 	}
+}
+
+func InitLog() {
+	fileName := Config().Logfile
+	logFile, err := os.Create(fileName)
+	if err != nil {
+		log.Fatalln("open file error !")
+	}
+	logger = log.New(logFile, "[Debug]", log.LstdFlags)
+	log.Println("logging on", fileName)
+}
+
+func Logger() *log.Logger {
+	lock.RLock()
+	defer lock.RUnlock()
+	return logger
 }
 
 var (
@@ -40,14 +59,14 @@ func SendToTransfer(metrics []*model.MetricValue) {
 
 	if debug {
 		for i, _ := range metrics {
-			log.Printf("=> <Total=%d> %v\n", len(metrics), metrics[i])
+			logger.Printf("=> <Total=%d> %v\n", len(metrics), metrics[i])
 		}
 	}
 
 	var resp model.TransferResponse
 	err := TransferClient.Call("Transfer.Update", metrics, &resp)
 	if err != nil {
-		log.Println("call Transfer.Update fail", err)
+		logger.Println("call Transfer.Update fail", err)
 	}
 
 	if debug {

@@ -6,6 +6,8 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+
+	"github.com/51idc/service-monitor/iis-monitor/g"
 )
 
 type smartAPI_Data struct {
@@ -49,21 +51,21 @@ func smartAPI_Push(url string, endpoint string, version string, debug bool) {
 		return
 	}
 	if res != 200 {
-		log.Println("smartAPI error,statcode= ", res)
+		g.Logger().Println("smartAPI error,statcode= ", res)
 		return
 	}
 
 	err = json.Unmarshal(body, &result)
 	if err != nil {
-		log.Println(err)
+		g.Logger().Println(err)
 		return
 	}
 	if result.Status != "ok" {
-		log.Println("SmartAPI return error: ", result.Message)
+		g.Logger().Println("SmartAPI return error: ", result.Message)
 		return
 	}
 	if debug {
-		log.Println("Push Version to SmartAPI Success: ", version)
+		g.Logger().Println("Push Version to SmartAPI Success: ", version)
 	}
 	return
 }

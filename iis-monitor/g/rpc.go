@@ -1,7 +1,6 @@
 package g
 
 import (
-	"log"
 	"math"
 	"net/rpc"
 	"sync"
@@ -42,7 +41,7 @@ func (this *SingleConnRpcClient) insureConn() {
 			return
 		}
 
-		log.Printf("dial %s fail: %v", this.RpcServer, err)
+		logger.Printf("dial %s fail: %v", this.RpcServer, err)
 
 		if retry > 6 {
 			retry = 1
@@ -71,7 +70,7 @@ func (this *SingleConnRpcClient) Call(method string, args interface{}, reply int
 
 	select {
 	case <-time.After(timeout):
-		log.Printf("[WARN] rpc call timeout %v => %v", this.rpcClient, this.RpcServer)
+		logger.Printf("[WARN] rpc call timeout %v => %v", this.rpcClient, this.RpcServer)
 		this.close()
 	case err := <-done:
 		if err != nil {

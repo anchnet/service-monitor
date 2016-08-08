@@ -34,6 +34,7 @@ type HttpConfig struct {
 type GlobalConfig struct {
 	Debug    bool            `json:"debug"`
 	Hostname string          `json:"hostname"`
+	Logfile  string          `json:"logfile"`
 	IIs      *IIsConfig      `json:"iis"`
 	SmartAPI *SmartAPIConfig `json:"smartAPI`
 	Transfer *TransferConfig `json:"transfer"`

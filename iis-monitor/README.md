@@ -86,13 +86,21 @@ go build -o iis-monitor.exe
 ```
 
 #### 运行
+以下命令需在管理员模式下运行开启命令行/Powershell
+
+先试运行一下
+```
+.\iis-monitor.exe
+2016/08/08 13:44:31 cfg.go:96: read config file: cfg.json successfully
+2016/08/08 13:44:31 var.go:31: logging on iis.log
+2016/08/08 13:44:31 http.go:64: listening :1990
+```
+等待1-2分钟，观察输出，确认运行正常
+使用 [nssm](https://nssm.cc/) 注册为 Windows 服务。
 
 ```
-iis-monitor.exe -c cfg.json
+.\nssm.exe install iis-monitor
+Administrator access is needed to install a service.
 ```
+![](http://i.imgur.com/9hmkeOf.png)
 
-#### 验证
-
-```
-./iis-monitor.exe --check
-```

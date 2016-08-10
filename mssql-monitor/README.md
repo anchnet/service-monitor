@@ -17,12 +17,12 @@ version 信息上报给 smartAPI
 |MsSQL.Log_File(s)_Used_Size_(KB)     |GUAGE|instance=instance|Log_File(s)_Used_Size_(KB)|
 |MsSQL.Percent_Log_Used     |GUAGE|instance=instance|Log_File(s)_Used_Size_(KB)|
 |MsSQL.Errors/sec     |GUAGE|error_type=error_type|Log_File(s)_Used_Size_(KB)|
-|MsSQL.Batch_Requests/sec     |GUAGE|\|Batch_Requests/sec|
-|MsSQL.Target_Server_Memory_(KB)     |GUAGE|\|Target_Server_Memory_(KB)|
-|MsSQL.Total_Server_Memory_(KB)     |GUAGE|\|Total_Server_Memory_(KB)|
-|MsSQL.IO_requests     |GUAGE|\|IO_requests|
-|MsSQL.Connection     |GUAGE|\|Connections|
-|MsSQL.Uptime    |GUAGE|\|Service Uptime|
+|MsSQL.Batch_Requests/sec     |GUAGE|/|Batch_Requests/sec|
+|MsSQL.Target_Server_Memory_(KB)     |GUAGE|/|Target_Server_Memory_(KB)|
+|MsSQL.Total_Server_Memory_(KB)     |GUAGE|/|Total_Server_Memory_(KB)|
+|MsSQL.IO_requests     |GUAGE|/|IO_requests|
+|MsSQL.Connection     |GUAGE|/|Connections|
+|MsSQL.Uptime    |GUAGE|/|Service Uptime|
 
 其中Lock_Waits/sec …… Total_Server_Memory_(KB) 等通过查询sys.dm_os_performance_counters 获得，这需要服务器上开启性能计数器。
 

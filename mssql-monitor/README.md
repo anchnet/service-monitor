@@ -41,6 +41,7 @@ version 信息上报给 smartAPI
 	"mssql":{
 		"enabled": true,
 		"addr":"127.0.0.1",
+		"port":1433,
 		"username":"sa",
 		"password":"123456",
 		"instance": [ //数据库实例名

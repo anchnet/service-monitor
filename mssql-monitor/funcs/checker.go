@@ -8,7 +8,7 @@ func CheckCollector() {
 
 	output := make(map[string]bool)
 
-	output["iisMetrics"] = len(iisMetrics()) > 0
+	output["mssqlMetrics"] = len(mssqlMetrics()) > 0
 
 	for k, v := range output {
 		status := "fail"

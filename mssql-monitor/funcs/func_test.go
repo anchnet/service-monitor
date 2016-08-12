@@ -10,6 +10,7 @@ const (
 	port     = 1433
 	user     = "sa"
 	password = "123456"
+	encrypt  = "disable"
 )
 
 func Test_in_array(t *testing.T) {
@@ -20,7 +21,7 @@ func Test_in_array(t *testing.T) {
 
 func Test_performance_query(t *testing.T) {
 	instance := []string{"_Total", "test"}
-	db, err := mssql_conn(server, port, user, password)
+	db, err := mssql_conn(server, port, user, password, encrypt)
 	if err != nil {
 		t.Error(err)
 	}
@@ -31,7 +32,7 @@ func Test_performance_query(t *testing.T) {
 }
 
 func Test_io_req_query(t *testing.T) {
-	db, err := mssql_conn(server, port, user, password)
+	db, err := mssql_conn(server, port, user, password, encrypt)
 	if err != nil {
 		t.Error(err)
 	}
@@ -42,7 +43,7 @@ func Test_io_req_query(t *testing.T) {
 }
 
 func Test_conn_query(t *testing.T) {
-	db, err := mssql_conn(server, port, user, password)
+	db, err := mssql_conn(server, port, user, password, encrypt)
 	if err != nil {
 		t.Error(err)
 	}
@@ -53,7 +54,7 @@ func Test_conn_query(t *testing.T) {
 }
 
 func Test_version_query(t *testing.T) {
-	db, err := mssql_conn(server, port, user, password)
+	db, err := mssql_conn(server, port, user, password, encrypt)
 	if err != nil {
 		t.Error(err)
 	}
@@ -64,7 +65,7 @@ func Test_version_query(t *testing.T) {
 }
 
 func Test_uptime_query(t *testing.T) {
-	db, err := mssql_conn(server, port, user, password)
+	db, err := mssql_conn(server, port, user, password, encrypt)
 	if err != nil {
 		t.Error(err)
 	}

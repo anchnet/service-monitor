@@ -24,9 +24,10 @@ func mssqlMetrics() (L []*model.MetricValue) {
 	user := g.Config().MsSQL.Username
 	password := g.Config().MsSQL.Password
 	instance := g.Config().MsSQL.Instance
+	encrypt := g.Config().MsSQL.Encrypt
 	instance = append(instance, "_Total")
 
-	db, err := mssql_conn(server, port, user, password)
+	db, err := mssql_conn(server, port, user, password, encrypt)
 	if err != nil {
 		log.Println(err)
 		return
@@ -81,8 +82,8 @@ func mssqlMetrics() (L []*model.MetricValue) {
 	return
 }
 
-func mssql_conn(server string, port int, user string, password string) (*sql.DB, error) {
-	connString := fmt.Sprintf("server=%s;user id=%s;password=%s;port=%d", server, user, password, port)
+func mssql_conn(server string, port int, user string, password string, encrypt string) (*sql.DB, error) {
+	connString := fmt.Sprintf("server=%s;user id=%s;password=%s;port=%d;encrypt=%s", server, user, password, port, encrypt)
 	db, err := sql.Open("mssql", connString)
 	if err != nil {
 		return nil, err

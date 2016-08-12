@@ -15,6 +15,7 @@ type MsSQLConfig struct {
 	Port     int      `json:"port"`
 	Username string   `json:"username"`
 	Password string   `json:"password"`
+	Encrypt  string   `json:"encrypt"`
 	Instance []string `json:"instance"`
 }
 

@@ -44,6 +44,11 @@ version 信息上报给 smartAPI
 		"port":1433,
 		"username":"sa",
 		"password":"123456",
+		"encrypt":"disable",
+		//disable - 不加密
+		//false - 除认证报文外不加密
+		//true -加密
+		//SQL Server 2008 和 SQL Server 2008 R2 必须选择 disable，否则无法正常认证。要修复这个问题，需要升级 SQL Server 2008 R2 SP2，或 SQL Server 2008 SP3
 		"instance": [ //数据库实例名
 	        "test"
 	    ]

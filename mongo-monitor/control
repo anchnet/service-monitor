@@ -5,6 +5,7 @@ cd $WORKSPACE
 
 mkdir -p var
 
+module=mongo-monitor
 app=falcon-$module
 conf=cfg.json
 pidfile=var/app.pid

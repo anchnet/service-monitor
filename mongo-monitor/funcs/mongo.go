@@ -38,6 +38,7 @@ func MongoMetrics() (L []*model.MetricValue) {
 	CounterMetrics, GaugeMetrics := mongo_Metrics(serverStatus)
 	if connections_current, ok := GaugeMetrics["connections_current"]; ok {
 		if connections_available, ok := GaugeMetrics["connections_available"]; ok {
+			if connections_available != 0 {
 				connections_used_percent := 100 * float64(connections_current) / float64(connections_available)
 				L = append(L, GaugeValue("Mongo.connections_used_percent", connections_used_percent))
 			}

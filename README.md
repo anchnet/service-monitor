@@ -4,19 +4,19 @@
 
 - Nginx
 
-beta
+version 0.0.1
 
 - Tomcat
 
-ToDo
+version 0.0.1
 
 - Apache
 
-ToDO
+version 0.0.1
 
 - IIS
 
-ToDo
+version 0.0.1
 
 #### SqlMon
 
@@ -26,17 +26,17 @@ Fork by mymon
 
 - sqlserver
 
-ToDo
+version 0.0.1
 
 #### NoSqlMon
 
 - monogoDB
 
-ToDo
+version 0.0.1
 
 - redis
 
-ToDo
+version 0.0.2
 
 #### Other
 

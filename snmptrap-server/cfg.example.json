@@ -1,0 +1,24 @@
+{
+	"debug": true,
+	"queue": {
+        "sms": "/sms",
+        "mail": "/mail"
+    },
+	"user":{
+		"sms":["1381230123","123457890"],
+		"mail":["abc@example.com","def@example.com"]	
+	},
+    "redis": {
+        "addr": "127.0.0.1:6379",
+        "maxIdle": 5
+    },
+	"trapServer":{
+		"trapcommunity":"public",
+		"community":"public",
+		"listen":"0.0.0.0:162"
+	},
+    "http": {
+        "enabled": true,
+        "listen": ":1998"
+    }
+}

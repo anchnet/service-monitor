@@ -17,7 +17,7 @@ func MongoMetrics() (L []*model.MetricValue) {
 	Password := g.Config().Mongo.Password
 	Authdb := g.Config().Mongo.Authdb
 
-	serverStatus, err := mongo_serverStatus(Addr, Username, Password, Authdb)
+	serverStatus, err := mongo_serverStatus(Addr, Authdb, Username, Password)
 	if err != nil {
 		log.Println(err)
 		return

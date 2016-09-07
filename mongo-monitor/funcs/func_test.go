@@ -13,7 +13,7 @@ const (
 )
 
 func Test_mongo_stat(t *testing.T) {
-	serverStatus, err := mongo_serverStatus(Addr, Username, Password, Authdb)
+	serverStatus, err := mongo_serverStatus(Addr, Authdb, Username, Password)
 	t.Error(err)
 	ver := mongo_version(serverStatus)
 	t.Log(ver)

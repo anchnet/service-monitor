@@ -1,0 +1,11 @@
+{
+	"debug": true,
+	"smartAPI": {
+		"enabled": true,
+		"url": "http://127.0.0.1:5678/api/sevice/version"
+	},
+    "http": {
+        "enabled": true,
+        "listen": ":5678"
+    }
+}

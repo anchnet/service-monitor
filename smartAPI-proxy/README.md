@@ -12,7 +12,7 @@ smartAPI-proxy 负责转发内网的 smartAPI 接口请求
 	"debug": true,
 	"smartAPI": {
 		"enabled": true,
-		"url": "http://127.0.0.1:5678/api/service/version"
+		"url": "http://smarteye.51idc.com"
 	},
     "http": {
         "enabled": true,

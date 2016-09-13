@@ -23,19 +23,25 @@ smartAPI-proxy 负责转发内网的 smartAPI 接口请求
 
 ```
 
+#### smartAPI 代理接口
+```
+curl -d '{"endpoint":"test","version":"0.0.1"}' http://127.0.0.1:5678/api/service/version
+
+```
+
 #### http 信息维护接口
 
 ```
-curl http://127.0.0.1:1990/health
+curl http://127.0.0.1:5678/health
 正常则返回 ok
 
-curl http://127.0.0.1:1990/version
+curl http://127.0.0.1:5678/version
 返回版本
 
-curl http://127.0.0.1:1990/workdir
+curl http://127.0.0.1:5678/workdir
 返回工作目录
  
-curl http://127.0.0.1:1990/config
+curl http://127.0.0.1:5678/config
 返回配置
 ```
 

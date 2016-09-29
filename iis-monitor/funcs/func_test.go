@@ -9,7 +9,7 @@ const (
 )
 
 func Test_iis_status(t *testing.T) {
-	result, err := iis_status("_Total", "Total Bytes Received")
+	result, err := IIsCounters()
 	t.Error(err)
 	t.Log(result)
 }

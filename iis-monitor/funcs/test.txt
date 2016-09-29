@@ -1,4 +1,0 @@
-UNKNOWN Total File Sent not found
-UNKNOWN Total File Receiverd not found
-UNKNOWN Maximum Connection not found
-UNKNOWN Total Not Found Erros not found

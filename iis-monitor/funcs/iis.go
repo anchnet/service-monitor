@@ -3,11 +3,10 @@ package funcs
 import (
 	"bufio"
 	"bytes"
-	"log"
-	"os"
+	"fmt"
+
 	"os/exec"
 	"strings"
-	"time"
 
 	"github.com/toolkits/file"
 
@@ -15,44 +14,19 @@ import (
 	"github.com/open-falcon/common/model"
 )
 
-const (
-	GUAGE   = 0
-	COUNTER = 1
-)
-
-type iis struct {
-	metric string
-	value  float64
-	Type   string
-	Tag    string
+func in_array(a string, array []string) bool {
+	for _, v := range array {
+		if a == v {
+			return true
+		}
+	}
+	return false
 }
 
-func iis_status(site string, counter string) (float64, error) {
-	hostname, err := os.Hostname()
-	if err != nil {
-		return 0, err
-	}
-	Counter := `\\` + hostname + `\web service(` + site + `)\` + counter
-	value, err := ReadPerformanceCounter(Counter)
-	return value, err
-}
-
-func iis_status_metric(site string, counter string, Type string, ch chan iis) {
-	var IIS iis
-	value, err := iis_status(site, counter)
-	if err != nil {
-		log.Println(err)
-	}
-	metric := strings.Replace(counter, " ", "_", -1)
-	site_tag := strings.Replace(site, " ", "_", -1)
-	IIS.metric = metric
-	IIS.Type = Type
-	IIS.Tag = site_tag
-	IIS.value = value
-	if counter == "Service Uptime" {
-		IIS.metric = "Uptime"
-	}
-	ch <- IIS
+func format_mertic(metric string) string {
+	result := strings.TrimSpace(metric)
+	result = strings.Replace(result, " ", "_", -1)
+	return result
 }
 
 func iis_version() (string, error) {
@@ -93,31 +67,39 @@ func iisMetrics() (L []*model.MetricValue) {
 	}
 
 	websites = append(websites, "_Total")
-	chs := make([]chan iis, len(websites)*len(Mertics))
-	startTime := time.Now()
-	i := 0
-	for _, site := range websites {
-		for metric, Type := range Mertics {
-			chs[i] = make(chan iis)
-			switch Type {
-			case "GUAGE":
-				go iis_status_metric(site, metric, Type, chs[i])
-			case "COUNTER":
-				go iis_status_metric(site, metric, Type, chs[i])
-			}
-			i = i + 1
+	IIsStat, err := IIsCounters()
+	if err != nil {
+		g.Logger().Println(err)
+		return
+	}
+	for _, iisStat := range IIsStat {
+		if in_array(iisStat.Name, websites) {
+			tag := fmt.Sprintf("site=%s", format_mertic(iisStat.Name))
+			L = append(L, CounterValue("iis.bytes.received", iisStat.BytesReceivedPersec, tag))
+			L = append(L, CounterValue("iis.bytes.sent", iisStat.BytesSentPersec, tag))
+			L = append(L, CounterValue("iis.requests.cgi", iisStat.CGIRequestsPersec, tag))
+			L = append(L, CounterValue("iis.connection.attempts", iisStat.ConnectionAttemptsPersec, tag))
+			L = append(L, CounterValue("iis.requests.copy", iisStat.CopyRequestsPersec, tag))
+			L = append(L, GaugeValue("iis.connections", iisStat.CurrentConnections, tag))
+			L = append(L, CounterValue("iis.requests.delete", iisStat.DeleteRequestsPersec, tag))
+			L = append(L, CounterValue("iis.requests.get", iisStat.GetRequestsPersec, tag))
+			L = append(L, CounterValue("iis.requests.head", iisStat.HeadRequestsPersec, tag))
+			L = append(L, CounterValue("iis.requests.isapi", iisStat.ISAPIExtensionRequestsPersec, tag))
+			L = append(L, CounterValue("iis.errors.locked", iisStat.LockedErrorsPersec, tag))
+			L = append(L, CounterValue("iis.requests.lock", iisStat.LockRequestsPersec, tag))
+			L = append(L, CounterValue("iis.requests.mkcol", iisStat.MkcolRequestsPersec, tag))
+			L = append(L, CounterValue("iis.requests.move", iisStat.MoveRequestsPersec, tag))
+			L = append(L, CounterValue("iis.errors.notfound", iisStat.NotFoundErrorsPersec, tag))
+			L = append(L, CounterValue("iis.requests.options", iisStat.OptionsRequestsPersec, tag))
+			L = append(L, CounterValue("iis.requests.post", iisStat.PostRequestsPersec, tag))
+			L = append(L, CounterValue("iis.requests.propfind", iisStat.PropfindRequestsPersec, tag))
+			L = append(L, CounterValue("iis.requests.proppatch", iisStat.ProppatchRequestsPersec, tag))
+			L = append(L, CounterValue("iis.requests.put", iisStat.PutRequestsPersec, tag))
+			L = append(L, CounterValue("iis.requests.search", iisStat.SearchRequestsPersec, tag))
+			L = append(L, CounterValue("iis.requests.trace", iisStat.TraceRequestsPersec, tag))
+			L = append(L, CounterValue("iis.requests.unlock", iisStat.UnlockRequestsPersec, tag))
+			L = append(L, GaugeValue("iis.service.uptime", iisStat.ServiceUptime, tag))
 		}
 	}
-	for _, ch := range chs {
-		IIS := <-ch
-		if IIS.Type == "GUAGE" {
-			L = append(L, GaugeValue("IIs."+IIS.metric, IIS.value, "site="+IIS.Tag))
-		}
-		if IIS.Type == "COUNTER" {
-			L = append(L, CounterValue("IIs."+IIS.metric, IIS.value, "site="+IIS.Tag))
-		}
-	}
-	endTime := time.Now()
-	g.Logger().Println("IIsStats Collect complete. Process time %s.", endTime.Sub(startTime))
 	return
 }

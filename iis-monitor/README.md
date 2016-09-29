@@ -12,16 +12,30 @@ version 信息上报给 smartAPI
 --------------------------------
 | Counters | Type |Tag| Notes|
 |-----|------|------|------|
-|IIs.Total_Bytes_Received  |COUNTER|site=site|Bytes Received/sec |
-|IIs.Total_Bytes_Sent      |COUNTER|site=site|Total Bytes Sent/sec|
-|IIs.Total_Delete_Requests      |COUNTER|site=site|Delete Requests/sec|
-|IIs.Total_Get_Requests     |COUNTER|site=site|Get Requests/sec|
-|IIs.Total_Post_Requests     |COUNTER|site=site|Post Requests/sec|
-|IIs.Total_Put_Requests     |COUNTER|site=site|Put Requests/sec|
-|IIs.Total_Not_Found_Errors     |COUNTER|site=site|Not Found Errors/sec|
-|IIs.Maximum_Connections     |GUAGE|site=site|Maximum Connections|
-|IIs.Current_Connections     |GUAGE|site=site|Current Connections|
-|IIs.Uptime     |GUAGE|site=site|Service Uptime|
+|iis.bytes.received  |COUNTER|site=site|Bytes Received/sec |
+|iis.bytes.sent     |COUNTER|site=site|Total Bytes Sent/sec|
+|iis.requests.cgi      |COUNTER|site=site|CGI Requests/sec|
+|iis.requests.copy     |COUNTER|site=site|copy Requests/sec|
+|iis.requests.delete     |COUNTER|site=site|delete Requests/sec|
+|iis.requests.get     |COUNTER|site=site|get Requests/sec|
+|iis.requests.head     |COUNTER|site=site|head Requests/sec|
+|iis.requests.isapi     |COUNTER|site=site|isapi Requests/sec|
+|iis.requests.lock     |COUNTER|site=site|lock Requests/sec|
+|iis.requests.mkcol     |COUNTER|site=site|mkcol Requests/sec|
+|iis.requests.move     |COUNTER|site=site|move Requests/sec|
+|iis.requests.options     |COUNTER|site=site|options Requests/sec|
+|iis.requests.post     |COUNTER|site=site|post Requests/sec|
+|iis.requests.proppatch     |COUNTER|site=site|proppatch Requests/sec|
+|iis.requests.propfind     |COUNTER|site=site|propfind Requests/sec|
+|iis.requests.put     |COUNTER|site=site|put Requests/sec|
+|iis.requests.search     |COUNTER|site=site|search Requests/sec|
+|iis.requests.trace     |COUNTER|site=site|trace Requests/sec|
+|iis.requests.unlock     |COUNTER|site=site|unlock Requests/sec|
+|iis.errors.notfount     |COUNTER|site=site|notfound errors/sec|
+|iis.errors.locked     |COUNTER|site=site|locked errors/sec|
+|iis.connection.attempts    |COUNTER|site=site|conn attempts/sec|
+|iis.connections    |GAUGE|site=site|connections|
+|iis.service.uptime     |GAUGE|site=site|Service Uptime|
 
 
 #### 使用方式

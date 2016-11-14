@@ -1,0 +1,28 @@
+{
+	"debug": true,
+	"hostname": "",
+	"mysql":{
+		"enabled": true,
+		"addr": "192.168.11.136",
+		"port": 3306,
+		"username": "root",
+		"password": "",
+		"ignore": {
+	        "Aborted_clients": true
+	    }
+ 	}, 
+	"smartAPI": {
+		"enabled": true,
+		"url": "http://127.0.0.1/api/sevice/version"
+	},
+    "transfer": {
+        "enabled": true,
+        "addr": "127.0.0.1:8433",
+        "interval": 60,
+        "timeout": 1000
+    },
+    "http": {
+        "enabled": true,
+        "listen": ":1990"
+    }
+}

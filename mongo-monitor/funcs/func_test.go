@@ -6,7 +6,7 @@ import (
 
 const (
 	pushurl  = "http://127.0.0.1/api/sevice/version"
-	Addr     = "127.0.0.1:27017"
+	Addr     = "192.168.11.136:22"
 	Username = ""
 	Password = ""
 	Authdb   = ""
@@ -14,6 +14,7 @@ const (
 
 func Test_mongo_stat(t *testing.T) {
 	serverStatus, err := mongo_serverStatus(Addr, Authdb, Username, Password)
+	t.Log(serverStatus)
 	t.Error(err)
 	ver := mongo_version(serverStatus)
 	t.Log(ver)
@@ -23,7 +24,7 @@ func Test_mongo_stat(t *testing.T) {
 }
 
 func Test_smartAPI_Push(t *testing.T) {
-	endpoint := "test"
+	endpoint := ""
 	version := "1.1.1"
 	smartAPI_Push(pushurl, endpoint, version, true)
 

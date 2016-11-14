@@ -11,7 +11,7 @@ import (
 func mongo_serverStatus(Addr string, AuthDB string, Username string, Password string) (map[string]interface{}, error) {
 	mongoDBDialInfo := &mgo.DialInfo{
 		Addrs:    []string{Addr},
-		Timeout:  60 * time.Second,
+		Timeout:  5 * time.Second,
 		Database: AuthDB,
 		Username: Username,
 		Password: Password,
@@ -128,13 +128,28 @@ func mongo_Metrics(serverStatus map[string]interface{}) (CounterMetrics map[stri
 	if network, ok := serverStatus["network"]; ok {
 		network_map := network.(bson.M)
 		if bytesIn, ok := network_map["bytesIn"]; ok {
-			CounterMetrics["network_bytesIn"] = bytesIn.(int64)
+			switch bytesin := bytesIn.(type) {
+			case int:
+				CounterMetrics["network_bytesIn"] = int64(bytesin)
+			case int64:
+				CounterMetrics["network_bytesIn"] = bytesin
+			}
 		}
 		if bytesOut, ok := network_map["bytesOut"]; ok {
-			CounterMetrics["network_bytesOut"] = bytesOut.(int64)
+			switch bytesout := bytesOut.(type) {
+			case int:
+				CounterMetrics["network_bytesOut"] = int64(bytesout)
+			case int64:
+				CounterMetrics["network_bytesOut"] = bytesout
+			}
 		}
 		if numRequests, ok := network_map["numRequests"]; ok {
-			CounterMetrics["network_numRequests"] = numRequests.(int64)
+			switch numrequests := numRequests.(type) {
+			case int:
+				CounterMetrics["network_numRequests"] = int64(numrequests)
+			case int64:
+				CounterMetrics["network_numRequests"] = numrequests
+			}
 		}
 	}
 	if opcounters, ok := serverStatus["opcounters"]; ok {
@@ -169,18 +184,39 @@ func mongo_Metrics(serverStatus map[string]interface{}) (CounterMetrics map[stri
 		if cursor, ok := metrics_map["cursor"]; ok {
 			cursor_map := cursor.(bson.M)
 			if timeOut, ok := cursor_map["timeOut"]; ok {
-				CounterMetrics["cursor_timedOut"] = timeOut.(int64)
+				switch timeout := timeOut.(type) {
+				case int:
+					CounterMetrics["cursor_timedOut"] = int64(timeout)
+				case int64:
+					CounterMetrics["cursor_timedOut"] = timeout
+				}
 			}
 			if open, ok := cursor_map["open"]; ok {
 				open_map := open.(bson.M)
 				if noTimeout, ok := open_map["noTimeout"]; ok {
-					GaugeMetrics["cursor_open_noTimeout"] = noTimeout.(int64)
+					switch notimeout := noTimeout.(type) {
+					case int:
+						GaugeMetrics["cursor_open_noTimeout"] = int64(notimeout)
+					case int64:
+						GaugeMetrics["cursor_open_noTimeout"] = notimeout
+					}
+
 				}
 				if total, ok := open_map["total"]; ok {
-					GaugeMetrics["cursor_open_total"] = total.(int64)
+					switch open_total := total.(type) {
+					case int:
+						GaugeMetrics["cursor_open_total"] = int64(open_total)
+					case int64:
+						GaugeMetrics["cursor_open_total"] = open_total
+					}
 				}
 				if pinned, ok := open_map["pinned"]; ok {
-					GaugeMetrics["cursor_open_pinned"] = pinned.(int64)
+					switch open_pinned := pinned.(type) {
+					case int:
+						GaugeMetrics["cursor_open_pinned"] = int64(open_pinned)
+					case int64:
+						GaugeMetrics["cursor_open_pinned"] = open_pinned
+					}
 				}
 			}
 		}
@@ -194,7 +230,12 @@ func mongo_Metrics(serverStatus map[string]interface{}) (CounterMetrics map[stri
 			CounterMetrics["backgroundFlushing_last_ms"] = int64(last_ms.(int))
 		}
 		if average_ms, ok := backgroundFlushing_map["average_ms"]; ok {
-			GaugeMetrics["backgroundFlushing_average_ms"] = int64(average_ms.(int))
+			switch average_ms_time := average_ms.(type) {
+			case int:
+				GaugeMetrics["backgroundFlushing_average_ms"] = int64(average_ms_time)
+			case float64:
+				GaugeMetrics["backgroundFlushing_average_ms"] = int64(average_ms_time)
+			}
 		}
 		if total_ms, ok := backgroundFlushing_map["total_ms"]; ok {
 			GaugeMetrics["backgroundFlushing_total_ms"] = int64(total_ms.(int))

@@ -41,14 +41,20 @@ func reportSysInfo() error {
 	mem := getMemInfo()
 	kernel := getKernelInfo()
 	osVersion := getOSVersion()
-	hostname, _ := g.Hostname()
-
+	hostname, err := g.Hostname()
+	if err != nil {
+		log.Println(err)
+		hostname = ""
+	}
 	sysinfo := SysInfo{
 		Endpoint:  hostname,
 		Cpu:       cpu,
 		Mem:       mem,
 		Version:   kernel,
 		OSVersion: osVersion,
+	}
+	if g.Config().Debug {
+		log.Println("sysinfo report: ", sysinfo)
 	}
 
 	b := new(bytes.Buffer)
@@ -72,7 +78,11 @@ func reportSysInfo() error {
 
 func getCpuInfo() int {
 
-	out, _ := exec.Command("wmic", "cpu", "get", "numberofcores").Output()
+	out, err := exec.Command("wmic", "cpu", "get", "numberofcores").Output()
+	if err != nil {
+		log.Println(err)
+		return 0
+	}
 	line := strings.Split(string(out), "\r\n")[1]
 	cores, err := strconv.Atoi(strings.TrimSpace(line))
 	if err != nil {
@@ -82,21 +92,37 @@ func getCpuInfo() int {
 }
 
 func getMemInfo() int {
-	out, _ := exec.Command("wmic", "memorychip", "get", "Capacity").Output()
+	out, err := exec.Command("wmic", "memorychip", "get", "Capacity").Output()
+	if err != nil {
+		log.Println(err)
+		return 0
+	}
 	line := strings.Split(string(out), "\r\n")[1]
-	mem, _ := strconv.Atoi(strings.TrimSpace(line))
+	mem, err := strconv.Atoi(strings.TrimSpace(line))
+	if err != nil {
+		log.Println(err)
+		return 0
+	}
 	return mem / 1024.0
 }
 
 func getKernelInfo() string {
-	out, _ := exec.Command("systeminfo").Output()
+	out, err := exec.Command("systeminfo").Output()
+	if err != nil {
+		log.Println(err)
+		return ""
+	}
 	kernel := strings.Split(string(out[:]), "\r\n")[3]
 	r := strings.TrimSpace(strings.Split(kernel, ":")[1])
 	return r
 }
 
 func getOSVersion() string {
-	out, _ := exec.Command("systeminfo").Output()
+	out, err := exec.Command("systeminfo").Output()
+	if err != nil {
+		log.Println(err)
+		return ""
+	}
 	osVersion := strings.Split(string(out[:]), "\r\n")[2]
 	r := strings.TrimSpace(strings.Split(osVersion, ":")[1])
 	return r

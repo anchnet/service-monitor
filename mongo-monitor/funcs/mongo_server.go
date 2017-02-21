@@ -80,7 +80,7 @@ func mongo_Metrics(serverStatus map[string]interface{}) (CounterMetrics map[stri
 			GaugeMetrics["connections_available"] = int64(available.(int))
 		}
 		if totalCreated, ok := connections_map["totalCreated"]; ok {
-			CounterMetrics["connections_totalCreated"] = totalCreated.(int64)
+			CounterMetrics["connections_totalCreated"] = int64(totalCreated.(int))
 		}
 	}
 	if extra_info, ok := serverStatus["extra_info"]; ok {

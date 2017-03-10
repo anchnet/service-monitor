@@ -25,7 +25,7 @@ type SmartAPIConfig struct {
 
 type TransferConfig struct {
 	Enabled  bool   `json:"enabled"`
-	Addr     string `json:"addr"`
+	Addrs    []string `json:"addrs"`
 	Interval int    `json:"interval"`
 	Timeout  int    `json:"timeout"`
 }
@@ -47,7 +47,7 @@ type GlobalConfig struct {
 var (
 	ConfigFile string
 	config     *GlobalConfig
-	lock       = new(sync.RWMutex)
+	lock = new(sync.RWMutex)
 )
 
 func Config() *GlobalConfig {

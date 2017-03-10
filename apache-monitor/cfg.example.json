@@ -1,22 +1,25 @@
 {
-	"debug": true,
-	"hostname": "",
-	"apache":{
-		"enabled": true,
-		"staturl": "https://www.apache.org/server-status?auto"
- 	}, 
-	"smartAPI": {
-		"enabled": true,
-		"url": "http://127.0.0.1/api/sevice/version"
-	},
-    "transfer": {
-        "enabled": true,
-        "addr": "127.0.0.1:8433",
-        "interval": 60,
-        "timeout": 1000
-    },
-    "http": {
-        "enabled": true,
-        "listen": ":1990"
-    }
+  "debug": true,
+  "hostname": "",
+  "apache": {
+    "enabled": true,
+    "staturl": "https://www.apache.org/server-status?auto"
+  },
+  "smartAPI": {
+    "enabled": true,
+    "url": "http://127.0.0.1/api/service/version"
+  },
+  "transfer": {
+    "enabled": true,
+    "addrs": [
+      "127.0.0.1:8433",
+      "127.0.0.1:8433"
+    ],
+    "interval": 60,
+    "timeout": 1000
+  },
+  "http": {
+    "enabled": true,
+    "listen": ":1990"
+  }
 }

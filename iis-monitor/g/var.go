@@ -4,12 +4,14 @@ import (
 	"log"
 	"os"
 	"time"
+	"sync"
+	"math/rand"
 
 	"github.com/open-falcon/common/model"
 )
 
 var (
-	Root   string
+	Root string
 	logger *log.Logger
 )
 
@@ -38,15 +40,16 @@ func Logger() *log.Logger {
 }
 
 var (
-	TransferClient *SingleConnRpcClient
+	TransferClientsLock *sync.RWMutex = new(sync.RWMutex)
+	TransferClients     map[string]*SingleConnRpcClient = map[string]*SingleConnRpcClient{}
 )
 
-func InitRpcClients() {
-	if Config().Transfer.Enabled {
-		TransferClient = &SingleConnRpcClient{
-			RpcServer: Config().Transfer.Addr,
-			Timeout:   time.Duration(Config().Transfer.Timeout) * time.Millisecond,
-		}
+func initTransferClient(addr string) {
+	TransferClientsLock.Lock()
+	defer TransferClientsLock.Unlock()
+	TransferClients[addr] = &SingleConnRpcClient{
+		RpcServer: addr,
+		Timeout:   time.Duration(Config().Transfer.Timeout) * time.Millisecond,
 	}
 }
 
@@ -64,12 +67,33 @@ func SendToTransfer(metrics []*model.MetricValue) {
 	}
 
 	var resp model.TransferResponse
-	err := TransferClient.Call("Transfer.Update", metrics, &resp)
-	if err != nil {
-		logger.Println("call Transfer.Update fail", err)
-	}
+	SendMetrics(metrics, &resp)
 
 	if debug {
 		log.Println("<=", &resp)
 	}
+}
+
+func SendMetrics(metrics []*model.MetricValue, resp *model.TransferResponse) {
+	rand.Seed(time.Now().UnixNano())
+	for _, i := range rand.Perm(len(Config().Transfer.Addrs)) {
+		addr := Config().Transfer.Addrs[i]
+		if _, ok := TransferClients[addr]; !ok {
+			initTransferClient(addr)
+		}
+		if updateMetrics(addr, metrics, resp) {
+			break
+		}
+	}
+}
+
+func updateMetrics(addr string, metrics []*model.MetricValue, resp *model.TransferResponse) bool {
+	TransferClientsLock.RLock()
+	defer TransferClientsLock.RUnlock()
+	err := TransferClients[addr].Call("Transfer.Update", metrics, resp)
+	if err != nil {
+		log.Println("call Transfer.Update fail", addr, err)
+		return false
+	}
+	return true
 }

@@ -13,7 +13,7 @@ func Collect() {
 		return
 	}
 
-	if g.Config().Transfer.Addr == "" {
+	if len(g.Config().Transfer.Addrs) == 0 {
 		return
 	}
 

@@ -26,8 +26,8 @@ func main() {
 
 	g.ParseConfig(*cfg)
 
-	g.InitRootDir()
-	g.InitRpcClients()
+	//g.InitRootDir()
+	//g.InitRpcClients()
 
 	if *check {
 		funcs.CheckCollector()

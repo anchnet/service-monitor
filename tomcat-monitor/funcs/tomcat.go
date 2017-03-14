@@ -11,8 +11,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 
 	"github.com/51idc/service-monitor/tomcat-monitor/g"
-	"github.com/open-falcon/common/model"
-)
+	"github.com/open-falcon/common/model")
 
 type Tomcat struct {
 	Jvm       Jvm         `xml:"jvm"`

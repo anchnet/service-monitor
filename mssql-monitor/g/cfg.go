@@ -26,7 +26,7 @@ type SmartAPIConfig struct {
 
 type TransferConfig struct {
 	Enabled  bool   `json:"enabled"`
-	Addr     string `json:"addr"`
+	Addrs    []string `json:"addrs"`
 	Interval int    `json:"interval"`
 	Timeout  int    `json:"timeout"`
 }

@@ -284,7 +284,7 @@ func performance_query(db *sql.DB, instance []string) ([]mssql, error) {
 				result = append(result, result_value)
 			} else {
 				result_value.metric = counter_name
-				result_value.Tag = ""
+				result_value.Tag = "instance=_Total"
 				result_value.Type = Type
 				result_value.value = float64(value)
 				result = append(result, result_value)

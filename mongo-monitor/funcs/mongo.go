@@ -45,10 +45,10 @@ func MongoMetrics() (L []*model.MetricValue) {
 		}
 	}
 	for metric, value := range GaugeMetrics {
-		L = append(L, GaugeValue("Mongo."+metric, value))
+		L = append(L, GaugeValue("Mongo." + metric, value))
 	}
 	for metric, value := range CounterMetrics {
-		L = append(L, CounterValue("Mongo."+metric, value))
+		L = append(L, CounterValue("Mongo." + metric, value))
 	}
 	return
 }

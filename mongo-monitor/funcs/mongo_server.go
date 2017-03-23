@@ -6,6 +6,7 @@ import (
 
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
+	"reflect"
 )
 
 func mongo_serverStatus(Addr string, AuthDB string, Username string, Password string) (map[string]interface{}, error) {
@@ -80,7 +81,7 @@ func mongo_Metrics(serverStatus map[string]interface{}) (CounterMetrics map[stri
 			GaugeMetrics["connections_available"] = int64(available.(int))
 		}
 		if totalCreated, ok := connections_map["totalCreated"]; ok {
-			CounterMetrics["connections_totalCreated"] = int64(totalCreated.(int))
+			CounterMetrics["connections_totalCreated"] = formatInt(totalCreated)
 		}
 	}
 	if extra_info, ok := serverStatus["extra_info"]; ok {
@@ -290,4 +291,16 @@ func mongo_Metrics(serverStatus map[string]interface{}) (CounterMetrics map[stri
 		}
 	}
 	return
+}
+
+
+func formatInt(value interface{}) int64{
+    v := reflect.ValueOf(value)
+    switch v.Kind() {
+    case reflect.Int, reflect.Int8, reflect.Int16,
+        reflect.Int32, reflect.Int64:
+        return v.Int()
+    default:
+        return 0
+    }
 }

@@ -1,21 +1,26 @@
 {
-    "debug": true,
-    "hostname": "",
-    "ip": "",
-    "smartapi": "http://127.0.0.1:5678/api/server/detail",
-    "heartbeat": {
-        "enabled": true,
-        "addr": "127.0.0.1:6030",
-        "interval": 120,
-        "timeout": 1000
-    },
-    "transfer": {
-        "enabled": true,
-        "addr": "192.168.6.222:8433",
-        "interval": 120,
-        "timeout": 1000
-    },
-    "ignore": {
-        "cpu.busy": true
-    }
+  "debug": true,
+  "hostname": "",
+  "ip": "",
+  "smartapi": "http://127.0.0.1:5678/api/server/detail",
+  "heartbeat": {
+    "enabled": true,
+    "addr": "127.0.0.1:6030",
+    "interval": 120,
+    "timeout": 1000
+  },
+  "transfer": {
+    "enabled": true,
+    "addrs": [
+      "127.0.0.1:8433",
+      "127.0.0.1:8433"
+    ],
+    "interval": 120,
+    "timeout": 1000
+  },
+  "ignore": {
+    "cpu.busy": true
+  },
+  "process": {},
+  "port": []
 }

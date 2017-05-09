@@ -10,18 +10,19 @@ import (
 	"github.com/51idc/service-monitor/windows-agent/tools/wmi"
 
 	"github.com/51idc/service-monitor/windows-agent/tools/internal/common"
+	"log"
 )
 
 var (
-	procGetDiskFreeSpaceExW     = common.Modkernel32.NewProc("GetDiskFreeSpaceExW")
+	procGetDiskFreeSpaceExW = common.Modkernel32.NewProc("GetDiskFreeSpaceExW")
 	procGetLogicalDriveStringsW = common.Modkernel32.NewProc("GetLogicalDriveStringsW")
-	procGetDriveType            = common.Modkernel32.NewProc("GetDriveTypeW")
-	provGetVolumeInformation    = common.Modkernel32.NewProc("GetVolumeInformationW")
+	procGetDriveType = common.Modkernel32.NewProc("GetDriveTypeW")
+	provGetVolumeInformation = common.Modkernel32.NewProc("GetVolumeInformationW")
 )
 
 var (
 	FileFileCompression = int64(16)     // 0x00000010
-	FileReadOnlyVolume  = int64(524288) // 0x00080000
+	FileReadOnlyVolume = int64(524288) // 0x00080000
 )
 
 type Win32_PerfFormattedData struct {
@@ -50,6 +51,7 @@ func DiskUsage(path string) (*DiskUsageStat, error) {
 	if diskret == 0 {
 		return nil, err
 	}
+	log.Println("diskret: ", diskret, " cur path:", path)
 	ret = &DiskUsageStat{
 		Path:        path,
 		Total:       uint64(lpTotalNumberOfBytes),
@@ -61,6 +63,7 @@ func DiskUsage(path string) (*DiskUsageStat, error) {
 		// InodesUsed: 0,
 		// InodesUsedPercent: 0,
 	}
+	log.Println("ret: ", ret)
 	return ret, nil
 }
 
@@ -76,7 +79,8 @@ func DiskPartitions(all bool) ([]DiskPartitionStat, error) {
 	for _, v := range lpBuffer {
 		if v >= 65 && v <= 90 {
 			path := string(v) + ":"
-			if path == "A:" || path == "B:" { // skip floppy drives
+			if path == "A:" || path == "B:" {
+				// skip floppy drives
 				continue
 			}
 			typepath, _ := syscall.UTF16PtrFromString(path)
@@ -109,10 +113,10 @@ func DiskPartitions(all bool) ([]DiskPartitionStat, error) {
 					return ret, err
 				}
 				opts := "rw"
-				if lpFileSystemFlags&FileReadOnlyVolume != 0 {
+				if lpFileSystemFlags & FileReadOnlyVolume != 0 {
 					opts = "ro"
 				}
-				if lpFileSystemFlags&FileFileCompression != 0 {
+				if lpFileSystemFlags & FileFileCompression != 0 {
 					opts += ".compress"
 				}
 
@@ -138,7 +142,8 @@ func DiskIOCounters() (map[string]DiskIOCountersStat, error) {
 		return ret, err
 	}
 	for _, d := range dst {
-		if len(d.Name) > 3 { // not get _Total or Harddrive
+		if len(d.Name) > 3 {
+			// not get _Total or Harddrive
 			continue
 		}
 		ret[d.Name] = DiskIOCountersStat{

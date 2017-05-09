@@ -30,7 +30,7 @@ func main() {
 		os.Exit(0)
 	}
 
-	g.InitRootDir()
+	//g.InitRootDir()
 	g.InitLocalIps()
 	g.InitRpcClients()
 

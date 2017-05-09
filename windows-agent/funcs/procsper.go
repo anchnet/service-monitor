@@ -10,6 +10,8 @@ import (
 	sigar "github.com/elastic/gosigar"
 	"github.com/open-falcon/common/model"
 	"github.com/shirou/gopsutil/process"
+	"github.com/51idc/service-monitor/windows-agent/g"
+	"strings"
 )
 
 type ProcUsage struct {
@@ -161,18 +163,44 @@ func ProcPreMetrics() (L []*model.MetricValue) {
 		log.Println(err)
 		return
 	}
+	process_map := g.Config().Process
 	for proc_name, value := range psusage_name {
+		for process := range process_map {
+			if process_map[process] && strings.Contains(strings.ToLower(proc_name), strings.ToLower(process)) {
+				process_tags := fmt.Sprintf("name=%v", process)
+				L = append(L, GaugeValue("process.alive", 1, process_tags))
+				process_map[process] = false
+			}
+		}
 		tags := fmt.Sprintf("name=%v", proc_name)
 		L = append(L, GaugeValue("proc.mem.vms", value.MemVms, tags))
 		L = append(L, GaugeValue("proc.mem.rss", value.MemRss, tags))
 		L = append(L, GaugeValue("proc.cpu.percentage", value.CpuP, tags))
 	}
 	for proc_cmdline, value := range psusage_cmdline {
+		for process := range process_map {
+			if process_map[process] && strings.Contains(strings.ToLower(proc_cmdline), strings.ToLower(process)) {
+				process_tags := fmt.Sprintf("name=%v", process)
+				L = append(L, GaugeValue("process.alive", 1, process_tags))
+				process_map[process] = false
+			}
+		}
 		tags := fmt.Sprintf("cmdline=%v", proc_cmdline)
 		L = append(L, GaugeValue("proc.mem.vms", value.MemVms, tags))
 		L = append(L, GaugeValue("proc.mem.rss", value.MemRss, tags))
 		L = append(L, GaugeValue("proc.cpu.percentage", value.CpuP, tags))
 	}
+	// name和cmd都没有检测到的都报0
+	// 重置状态
+	for process := range process_map {
+		if process_map[process] {
+			process_tags := fmt.Sprintf("name=%v", process)
+			L = append(L, GaugeValue("process.alive", 0, process_tags))
+		} else {
+			process_map[process] = true
+		}
+	}
+
 	endTime := time.Now()
 	log.Printf("UpdateProcessStats complete. Process time %s.", endTime.Sub(startTime))
 	return

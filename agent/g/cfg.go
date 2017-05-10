@@ -7,6 +7,7 @@ import (
 	"sync"
 
 	"github.com/toolkits/file"
+	"time"
 )
 
 type PluginConfig struct {
@@ -51,12 +52,15 @@ type GlobalConfig struct {
 	SmartAPI      string           `json:"smartapi"`
 	Collector     *CollectorConfig `json:"collector"`
 	IgnoreMetrics map[string]bool  `json:"ignore"`
+	Port          []string           `json:"port"`
+	DialTimeout   time.Duration  `json:"dialTimeOut"`
+	Process       map[string]bool `json:"process"`
 }
 
 var (
 	ConfigFile string
 	config     *GlobalConfig
-	lock       = new(sync.RWMutex)
+	lock = new(sync.RWMutex)
 )
 
 func Config() *GlobalConfig {

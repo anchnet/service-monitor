@@ -5,7 +5,6 @@ import (
 )
 
 const (
-	dsn = "c##test/test1234@127.0.0.1:1521/orcl"
 )
 
 func Test_version_query(t *testing.T) {

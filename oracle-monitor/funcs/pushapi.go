@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"io/ioutil"
-	"log"
 	"net/http"
 
 	"github.com/51idc/service-monitor/oracle-monitor/g"
@@ -32,7 +31,7 @@ func sendData(url string, data smartAPI_Data) ([]byte, int, error) {
 	}
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		log.Println(err)
+		g.Logger().Println(err)
 		return nil, 0, err
 	}
 	defer res.Body.Close()
@@ -47,7 +46,7 @@ func smartAPI_Push(url string, endpoint string, version string, debug bool) {
 	data.Version = version
 	body, res, err := sendData(url, data)
 	if err != nil {
-		log.Println(err)
+		g.Logger().Println(err)
 		return
 	}
 	if res != 200 {

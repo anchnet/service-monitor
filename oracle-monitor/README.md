@@ -12,6 +12,45 @@ version 信息上报给 smartAPI
 --------------------------------
 | Counters | Type |Tag| Notes|
 |-----|------|------|------|
+|Oracle.alive|GAUGE|/|oracle alive, 1/-1|
+|Oracle.Uptime|GAUGE|database=database,instance=instance|uptime|
+|tablespace_name|GAUGE|database=database,instance=instance,tablespace_name=tablespace_name|tablespace usage percent|
+|Oracle.sysmetric.User_Calls_Per_Txn|GAUGE|database=database,instance=instance|Calls Per Txn|
+|Oracle.sysmetric.Logical_Reads_Per_Sec|GAUGE|database=database,instance=instance|Reads Per Second|
+|Oracle.sysmetric.Logical_Reads_Per_Txn|GAUGE|database=database,instance=instance|Reads Per Txn|
+|Oracle.sysmetric.Redo_Writes_Per_Sec|GAUGE|database=database,instance=instance|Writes Per Second|
+|Oracle.sysmetric.Redo_Writes_Per_Txn|GAUGE|database=database,instance=instance|Writes Per Txn|
+|Oracle.sysmetric.Total_Table_Scans_Per_Sec|GAUGE|database=database,instance=instance|Scans Per Second|
+|Oracle.sysmetric.Total_Table_Scans_Per_Txn|GAUGE|database=database,instance=instance|Scans Per Txn|
+|Oracle.sysmetric.Full_Index_Scans_Per_Sec|GAUGE|database=database,instance=instance|Scans Per Second|
+|Oracle.sysmetric.Full_Index_Scans_Per_Txn|GAUGE|database=database,instance=instance|Scans Per Txn|
+|Oracle.sysmetric.Execute_Without_Parse_Ratio|GAUGE|database=database,instance=instance|% (ExecWOParse/TotalExec)|
+|Oracle.sysmetric.Soft_Parse_Ratio|GAUGE|database=database,instance=instance|% SoftParses/TotalParses|
+|Oracle.sysmetric.Host_CPU_Utilization_Ratio|GAUGE|database=database,instance=instance|% Busy/(Idle+Busy)|
+|Oracle.sysmetric.DB_Block_Gets_Per_Sec|GAUGE|database=database,instance=instance|Blocks Per Second|
+|Oracle.sysmetric.DB_Block_Gets_Per_Txn|GAUGE|database=database,instance=instance|Blocks Per Txn|
+|Oracle.sysmetric.Consistent_Read_Gets_Per_Sec|GAUGE|database=database,instance=instance|Blocks Per Second|
+|Oracle.sysmetric.Consistent_Read_Gets_Per_Txn|GAUGE|database=database,instance=instance|Blocks Per Txn|
+|Oracle.sysmetric.DB_Block_Changes_Per_Sec|GAUGE|database=database,instance=instance|Blocks Per Second|
+|Oracle.sysmetric.DB_Block_Changes_Per_Txn|GAUGE|database=database,instance=instance|Blocks Per Txn|
+|Oracle.sysmetric.Consistent_Read_Changes_Per_Sec|GAUGE|database=database,instance=instance|Blocks Per Second|
+|Oracle.sysmetric.Consistent_Read_Changes_Per_Txn|GAUGE|database=database,instance=instance|Blocks Per Txn|
+|Oracle.sysmetric.Database_CPU_Time_Ratio|GAUGE|database=database,instance=instance|% Cpu/DB_Time|
+|Oracle.sysmetric.Library_Cache_Hit_Ratio|GAUGE|database=database,instance=instance|% Hits/Pins|
+|Oracle.sysmetric.Shared_Pool_Free_Ratio|GAUGE|database=database,instance=instance|% Free/Total|
+|Oracle.sysmetric.Executions_Per_Txn|GAUGE|database=database,instance=instance|Executes Per Txn|
+|Oracle.sysmetric.Executions_Per_Sec|GAUGE|database=database,instance=instance|Executes Per Second|
+|Oracle.sysmetric.Txns_Per_Logon|GAUGE|database=database,instance=instance|Txns Per Logon|
+|Oracle.sysmetric.Database_Time_Per_Sec|GAUGE|database=database,instance=instance|CentiSeconds Per Second|
+|Oracle.sysmetric.Average_Active_Sessions|GAUGE|database=database,instance=instance|Active Sessions|
+|Oracle.sysmetric.Host_CPU_Usage_Per_Sec|GAUGE|database=database,instance=instance|CentiSeconds Per Second|
+|Oracle.sysmetric.Cell_Physical_IO_Interconnect_Bytes|GAUGE|database=database,instance=instance|bytes|
+|Oracle.sysmetric.Temp_Space_Used|GAUGE|database=database,instance=instance|bytes|
+|Oracle.sysmetric.Total_PGA_Allocated|GAUGE|database=database,instance=instance|bytes|
+|Oracle.sysmetric.Total_PGA_Used_by_SQL_Workareas|GAUGE|database=database,instance=instance|bytes|
+|Oracle.waitmetric.avg_dbtime_wait_1m|GAUGE|database=database,instance=instance,wait_class=wait_class|Percent of database time spent in the wait|
+|Oracle.waitmetric.avg_waiter_1m|GAUGE|database=database,instance=instance,wait_class=wait_class|Average waiter count
+
 
 
 
@@ -26,7 +65,7 @@ version 信息上报给 smartAPI
   "logfile": "oracle.log",
   "hostname": "",
   "db": {
-   	"dsn": "c##test/test@127.0.0.1:1521/orcl",
+   	"dsn": "system/test@127.0.0.1:1521/orcl",  //需要有 dba 权限
     "timeout": 5
    },
   "smartAPI": {
@@ -65,27 +104,29 @@ curl http://127.0.0.1:1990/config
 返回配置
 ```
 
-#### 源码安装
+#### 编译
+下载 oracle-client 和 oracle-client-sdk , 准备好 gcc 环境（windows 建议用 MinGW)，准备好 pkg-config 。参考 https://github.com/rana/ora 配置 pkg-config
+
+然后先 ```go get gopkg.in/rana/ora.v4``` 看是 cgo 是否能编译成功。
+
+成功 get 下来以后，再编译 oracle-monitor
 
 ```
-todo
+go get ./...
+go build
 ```
 
 #### 运行
-以下命令需在管理员模式下运行开启 cmd/Powershell
-
-先试运行一下
+运行时，需要 oracle 相关 lib 依赖。需要将编译时所使用 oracle oci 的 lib
+##### linux
+下载打包好的压缩包（其中包含 oracle 12.2 的 oci lib）
 ```
-PS C:\Users\Administrator\Desktop\monitor> .\oracle-monitor.exe
-2017/06/20 00:21:37 cfg.go:96: read config file: cfg.json successfully
-2017/06/20 00:21:37 var.go:24: logging on oracle.log
-2017/06/20 00:21:37 http.go:64: listening :1990
+tar -zxvf falcon-oracle-monitor-0.0.1.tar.gz //解压
+echo "$(pwd)/lib" > /etc/ld.so.conf.d/oracle-client.conf //将 lib 库放入 ld 的配置文件中
+ldconfig //配置生效
+echo 127.0.0.1 ${HOSTNAME} >> /etc/hosts //oracle 要求主机名存在解析，如果本机的主机名没有解析的话，在 hosts 里添加一下
+./control start //运行
 ```
-等待1-2分钟，观察输出，确认运行正常
-使用 [nssm](https://nssm.cc/) 注册为 Windows 服务。
-
-```
-.\nssm.exe install oracle-monitor
-Administrator access is needed to install a service.
-```
+##### windows
+1. ToDo
 

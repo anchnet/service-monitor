@@ -5,6 +5,7 @@ import (
 )
 
 const (
+	dsn = "system/test123@127.0.0.1:1521/orcl"
 )
 
 func Test_version_query(t *testing.T) {

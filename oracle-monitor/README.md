@@ -128,5 +128,10 @@ echo 127.0.0.1 ${HOSTNAME} >> /etc/hosts //oracle 要求主机名存在解析，
 ./control start //运行
 ```
 ##### windows
-1. ToDo
-
+1. 解压缩 oracle-monitor-0.0.1.zip
+2. 把 lib 目录添加到环境变量PATH中。如果服务器上有部署 oracle 12 的话，不需要此步骤。如果部署的是 11,则需要确保 lib 目录的环境变量位置在 oracle 11 的环境变量目录之前。例如
+```
+PAHT=C:\Users\Administrator\Desktop\oracle-monitor\lib;C:\app\Administrator\product\11.2.0\dbhome_1\bin;%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;%SYSTEMROOT%\System32\WindowsPowerShell\v1.0\
+```
+3. 运行 oracle-monitor.exe，观察日志是否正确运行
+4. 使用 nssm 注册为服务

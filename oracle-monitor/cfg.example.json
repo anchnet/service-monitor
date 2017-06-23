@@ -3,7 +3,7 @@
   "logfile": "oracle.log",
   "hostname": "",
   "db": {
-   	"dsn": "c##test/test@127.0.0.1:1521/orcl",
+   	"dsn": "system/test@127.0.0.1:1521/orcl",
     "timeout": 5
    },
   "smartAPI": {
@@ -20,7 +20,7 @@
     "timeout": 1000
   },
   "http": {
-    "enabled": true,
+    "enabled": fasle,
     "listen": ":1990"
   }
 }

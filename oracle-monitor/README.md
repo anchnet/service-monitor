@@ -82,7 +82,7 @@ version 信息上报给 smartAPI
     "timeout": 1000
   },
   "http": {
-    "enabled": true,
+    "enabled": false,
     "listen": ":1990"
   }
 }

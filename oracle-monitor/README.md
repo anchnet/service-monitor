@@ -137,8 +137,13 @@ Libs.private:
 Cflags: -I${includedir}
 ~                            
 ```
-5. 先 ```go get gopkg.in/rana/ora.v4``` 看是 cgo 是否能编译成功
-6. 成功 get 下来以后，再编译 oracle-monitor,进入51idc/service-monitor/oracle-monitor目录
+5. 
+```
+echo "/usr/lib/oracle/12.2/client64/lib" > /etc/ld.so.conf.d/oracle-client.conf
+ldconfig
+```
+6. 先 ```go get gopkg.in/rana/ora.v4``` 看是 cgo 是否能编译成功
+7. 成功 get 下来以后，再编译 oracle-monitor,进入51idc/service-monitor/oracle-monitor目录
 ```
 go get ./...
 ./control build
@@ -170,7 +175,7 @@ Libs.private:
 Cflags: -I${includedir}
 ```
 4. 先 ```go get gopkg.in/rana/ora.v4``` 看是 cgo 是否能编译成功
-6. 成功 get 下来以后，再编译 oracle-monitor,进入51idc/service-monitor/oracle-monitor目录，编译之
+5. 成功 get 下来以后，再编译 oracle-monitor,进入51idc/service-monitor/oracle-monitor目录，编译之
 ```
 go get ./...
 go build

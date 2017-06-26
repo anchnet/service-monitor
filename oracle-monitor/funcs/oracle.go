@@ -31,10 +31,7 @@ func oracleMetrics() (L []*model.MetricValue) {
 	timeout := g.Config().Db.Timeout
 
 	db, err := oracle_conn(dsn)
-	if err == nil {
-		L = append(L, GaugeValue("Oracle.alive", 1))
-	} else {
-		L = append(L, GaugeValue("Oracle.alive", -1))
+	if err != nil {
 		g.Logger().Println(err)
 		return
 	}

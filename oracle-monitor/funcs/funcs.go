@@ -17,6 +17,7 @@ func BuildMappers() {
 	Mappers = []FuncsAndInterval{
 		FuncsAndInterval{
 			Fs: []func() []*model.MetricValue{
+				AgentMetrics,
 				oracleMetrics,
 			},
 			Interval: interval,

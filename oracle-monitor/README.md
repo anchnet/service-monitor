@@ -14,7 +14,7 @@ version 信息上报给 smartAPI
 |-----|------|------|------|
 |Oracle.alive|GAUGE|/|oracle alive, 1/-1|
 |Oracle.Uptime|GAUGE|database=database,instance=instance|uptime|
-|tablespace_name|GAUGE|database=database,instance=instance,tablespace_name=tablespace_name|tablespace usage percent|
+|Oracle.tablespace|GAUGE|database=database,instance=instance,tablespace_name=tablespace_name|tablespace usage percent|
 |Oracle.sysmetric.User_Calls_Per_Txn|GAUGE|database=database,instance=instance|Calls Per Txn|
 |Oracle.sysmetric.Logical_Reads_Per_Sec|GAUGE|database=database,instance=instance|Reads Per Second|
 |Oracle.sysmetric.Logical_Reads_Per_Txn|GAUGE|database=database,instance=instance|Reads Per Txn|

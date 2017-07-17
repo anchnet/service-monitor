@@ -37,6 +37,7 @@ func ReportSysInfo() {
 }
 
 func reportSysInfo() error {
+	sysInfoInit()//将cmd代码页编码格式修改为utf8，防止中文乱码
 	cpu := getCpuInfo()
 	mem := getMemInfo()
 	kernel := getKernelInfo()
@@ -74,6 +75,13 @@ func reportSysInfo() error {
 		err = errors.New(message.Message)
 	}
 	return err
+}
+
+func sysInfoInit() {
+	err := exec.Command("chcp", "65001").Run()
+	if err != nil {
+		log.Println(err)
+	}
 }
 
 func getCpuInfo() int {

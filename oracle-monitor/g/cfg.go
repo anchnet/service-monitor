@@ -7,21 +7,16 @@ import (
 	"sync"
 
 	"github.com/toolkits/file"
-	"time"
 )
 
-type PluginConfig struct {
-	Enabled bool   `json:"enabled"`
-	Dir     string `json:"dir"`
-	Git     string `json:"git"`
-	LogDir  string `json:"logs"`
+type DbConfig struct {
+	Dsn     string `json:"dsn"`
+	Timeout int    `json:"timeout`
 }
 
-type HeartbeatConfig struct {
-	Enabled  bool   `json:"enabled"`
-	Addr     string `json:"addr"`
-	Interval int    `json:"interval"`
-	Timeout  int    `json:"timeout"`
+type SmartAPIConfig struct {
+	Enabled bool   `json:"enabled"`
+	Url     string `json:"url"`
 }
 
 type TransferConfig struct {
@@ -32,35 +27,24 @@ type TransferConfig struct {
 }
 
 type HttpConfig struct {
-	Enabled  bool   `json:"enabled"`
-	Listen   string `json:"listen"`
-	Backdoor bool   `json:"backdoor"`
-}
-
-type CollectorConfig struct {
-	IfacePrefix []string `json:"ifacePrefix"`
+	Enabled bool   `json:"enabled"`
+	Listen  string `json:"listen"`
 }
 
 type GlobalConfig struct {
-	Debug         bool             `json:"debug"`
-	Hostname      string           `json:"hostname"`
-	IP            string           `json:"ip"`
-	Plugin        *PluginConfig    `json:"plugin"`
-	Heartbeat     *HeartbeatConfig `json:"heartbeat"`
-	Transfer      *TransferConfig  `json:"transfer"`
-	Http          *HttpConfig      `json:"http"`
-	SmartAPI      string           `json:"smartapi"`
-	Collector     *CollectorConfig `json:"collector"`
-	IgnoreMetrics map[string]bool  `json:"ignore"`
-	Port          []string           `json:"port"`
-	DialTimeout   time.Duration  `json:"dialTimeOut"`
-	Process       map[string]bool `json:"process"`
+	Debug    bool            `json:"debug"`
+	Hostname string          `json:"hostname"`
+	Logfile  string          `json:"logfile"`
+	Db       *DbConfig       `json:"db"`
+	SmartAPI *SmartAPIConfig `json:"smartAPI`
+	Transfer *TransferConfig `json:"transfer"`
+	Http     *HttpConfig     `json:"http"`
 }
 
 var (
 	ConfigFile string
 	config     *GlobalConfig
-	lock = new(sync.RWMutex)
+	lock       = new(sync.RWMutex)
 )
 
 func Config() *GlobalConfig {
@@ -80,20 +64,6 @@ func Hostname() (string, error) {
 		log.Println("ERROR: os.Hostname() fail", err)
 	}
 	return hostname, err
-}
-
-func IP() string {
-	ip := Config().IP
-	if ip != "" {
-		// use ip in configuration
-		return ip
-	}
-
-	if len(LocalIps) > 0 {
-		ip = LocalIps[0]
-	}
-
-	return ip
 }
 
 func ParseConfig(cfg string) {
@@ -124,4 +94,5 @@ func ParseConfig(cfg string) {
 	config = &c
 
 	log.Println("read config file:", cfg, "successfully")
+
 }

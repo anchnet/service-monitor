@@ -3,18 +3,10 @@ package cron
 import (
 	"time"
 
-	"github.com/51idc/service-monitor/windows-agent/funcs"
-	"github.com/51idc/service-monitor/windows-agent/g"
+	"github.com/51idc/service-monitor/oracle-monitor/funcs"
+	"github.com/51idc/service-monitor/oracle-monitor/g"
 	"github.com/open-falcon/common/model"
 )
-
-func InitDataHistory() {
-	for {
-		funcs.UpdateCpuStat()
-		time.Sleep(g.COLLECT_INTERVAL)
-	}
-
-}
 
 func Collect() {
 
@@ -29,22 +21,19 @@ func Collect() {
 	for _, v := range funcs.Mappers {
 		go collect(int64(v.Interval), v.Fs)
 	}
-
 }
 
 func collect(sec int64, fns []func() []*model.MetricValue) {
+	t := time.NewTicker(time.Second * time.Duration(sec)).C
 	for {
-	REST:
-		time.Sleep(time.Duration(sec) * time.Second)
+		<-t
 
 		hostname, err := g.Hostname()
 		if err != nil {
-			goto REST
+			continue
 		}
 
 		mvs := []*model.MetricValue{}
-		ignoreMetrics := g.Config().IgnoreMetrics
-
 		for _, fn := range fns {
 			items := fn()
 			if items == nil {
@@ -56,11 +45,7 @@ func collect(sec int64, fns []func() []*model.MetricValue) {
 			}
 
 			for _, mv := range items {
-				if b, ok := ignoreMetrics[mv.Metric]; ok && b {
-					continue
-				} else {
-					mvs = append(mvs, mv)
-				}
+				mvs = append(mvs, mv)
 			}
 		}
 
@@ -70,6 +55,7 @@ func collect(sec int64, fns []func() []*model.MetricValue) {
 			mvs[j].Endpoint = hostname
 			mvs[j].Timestamp = now
 		}
+
 		g.SendToTransfer(mvs)
 
 	}

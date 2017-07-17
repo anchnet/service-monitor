@@ -45,5 +45,11 @@ func BuildMappers() {
 			},
 			Interval: interval,
 		},
+		FuncsAndInterval{
+			Fs: []func() []*model.MetricValue{
+				PortMetrics,
+			},
+			Interval: interval,
+		},
 	}
 }

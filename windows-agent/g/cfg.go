@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"sync"
+	"time"
 )
 
 type PluginConfig struct {
@@ -26,7 +27,7 @@ type HeartbeatConfig struct {
 
 type TransferConfig struct {
 	Enabled  bool   `json:"enabled"`
-	Addr     string `json:"addr"`
+	Addrs    []string `json:"addrs"`
 	Interval int    `json:"interval"`
 	Timeout  int    `json:"timeout"`
 }
@@ -39,12 +40,15 @@ type GlobalConfig struct {
 	Heartbeat     *HeartbeatConfig `json:"heartbeat"`
 	Transfer      *TransferConfig  `json:"transfer"`
 	IgnoreMetrics map[string]bool  `json:"ignore"`
+	Port          []string           `json:"port"`
+	DialTimeout   time.Duration  `json:"dialTimeOut"`
+	Process       map[string]bool `json:"process"`
 }
 
 var (
 	ConfigFile string
 	config     *GlobalConfig
-	lock       = new(sync.RWMutex)
+	lock = new(sync.RWMutex)
 )
 
 func Config() *GlobalConfig {

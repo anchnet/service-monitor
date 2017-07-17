@@ -35,6 +35,8 @@ func MemMetrics() []*model.MetricValue {
 		GaugeValue("mem.memtotal", m.MemTotal),
 		GaugeValue("mem.memused", memUsed),
 		GaugeValue("mem.memfree", memFree),
+		GaugeValue("mem.buffers", m.Buffers),
+		GaugeValue("mem.cached", m.Cached),
 		GaugeValue("mem.swaptotal", m.SwapTotal),
 		GaugeValue("mem.swapused", m.SwapUsed),
 		GaugeValue("mem.swapfree", m.SwapFree),

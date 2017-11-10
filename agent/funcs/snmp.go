@@ -1,7 +1,7 @@
 package funcs
 
 import (
-	"log"
+	log "github.com/cihub/seelog"
 
 	"github.com/open-falcon/common/model"
 	"github.com/toolkits/nux"
@@ -10,7 +10,7 @@ import (
 func UdpMetrics() []*model.MetricValue {
 	udp, err := nux.Snmp("Udp")
 	if err != nil {
-		log.Println("read snmp fail", err)
+		log.Info("read snmp fail", err)
 		return []*model.MetricValue{}
 	}
 

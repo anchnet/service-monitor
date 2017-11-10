@@ -1,10 +1,10 @@
 package cron
 
 import (
-	"log"
+	log "github.com/cihub/seelog"
 	"time"
 
-	"github.com/51idc/service-monitor/agent/g"
+	"github.com/anchnet/service-monitor/agent/g"
 	"github.com/open-falcon/common/model"
 )
 
@@ -24,7 +24,7 @@ func syncTrustableIps() {
 		var ips string
 		err := g.HbsClient.Call("Agent.TrustableIps", model.NullRpcRequest{}, &ips)
 		if err != nil {
-			log.Println("ERROR: call Agent.TrustableIps fail", err)
+			log.Info("ERROR: call Agent.TrustableIps fail", err)
 			continue
 		}
 

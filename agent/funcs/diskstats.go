@@ -2,7 +2,7 @@ package funcs
 
 import (
 	"fmt"
-	"log"
+	log "github.com/cihub/seelog"
 	"strings"
 	"sync"
 
@@ -90,7 +90,7 @@ func DiskIOMetrics() (L []*model.MetricValue) {
 
 	dsList, err := nux.ListDiskStats()
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 		return
 	}
 

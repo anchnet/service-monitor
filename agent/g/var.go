@@ -1,7 +1,7 @@
 package g
 
 import (
-	"log"
+	log "github.com/cihub/seelog"
 	"os"
 	"strings"
 	"sync"
@@ -18,7 +18,7 @@ func InitRootDir() {
 	var err error
 	Root, err = os.Getwd()
 	if err != nil {
-		log.Fatalln("getwd fail:", err)
+		log.Error("getwd fail:", err)
 	}
 }
 
@@ -28,7 +28,7 @@ func InitLocalIps() {
 	var err error
 	LocalIps, err = net.IntranetIP()
 	if err != nil {
-		log.Fatalln("get intranet ip fail:", err)
+		log.Error("get intranet ip fail:", err)
 	}
 }
 
@@ -53,14 +53,14 @@ func SendToTransfer(metrics []*model.MetricValue) {
 	debug := Config().Debug
 
 	if debug {
-		log.Printf("=> <Total=%d> %v\n", len(metrics), metrics[0])
+		log.Infof("=> <Total=%d> %v\n", len(metrics), metrics[0])
 	}
 
 	var resp model.TransferResponse
 	SendMetrics(metrics, &resp)
 
 	if debug {
-		log.Println("<=", &resp)
+		log.Info("<=", &resp)
 	}
 }
 

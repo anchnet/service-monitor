@@ -1,10 +1,10 @@
 package funcs
 
 import (
-	"log"
+	log "github.com/cihub/seelog"
 	"strings"
 
-	"github.com/51idc/service-monitor/agent/g"
+	"github.com/anchnet/service-monitor/agent/g"
 	"github.com/open-falcon/common/model"
 	"github.com/toolkits/nux"
 )
@@ -19,7 +19,7 @@ func ProcMetrics() (L []*model.MetricValue) {
 
 	ps, err := nux.AllProcs()
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 		return
 	}
 

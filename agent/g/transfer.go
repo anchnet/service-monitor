@@ -1,7 +1,7 @@
 package g
 
 import (
-	"log"
+	log "github.com/cihub/seelog"
 	"math/rand"
 	"sync"
 	"time"
@@ -41,7 +41,7 @@ func updateMetrics(addr string, metrics []*model.MetricValue, resp *model.Transf
 	defer TransferClientsLock.RUnlock()
 	err := TransferClients[addr].Call("Transfer.Update", metrics, resp)
 	if err != nil {
-		log.Println("call Transfer.Update fail", addr, err)
+		log.Info("call Transfer.Update fail", addr, err)
 		return false
 	}
 	return true

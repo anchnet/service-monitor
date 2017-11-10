@@ -2,10 +2,10 @@ package cron
 
 import (
 	"fmt"
-	"log"
+	log "github.com/cihub/seelog"
 	"time"
 
-	"github.com/51idc/service-monitor/agent/g"
+	"github.com/anchnet/service-monitor/agent/g"
 	"github.com/open-falcon/common/model"
 )
 
@@ -32,7 +32,7 @@ func reportAgentStatus(interval time.Duration) {
 		var resp model.SimpleRpcResponse
 		err = g.HbsClient.Call("Agent.ReportStatus", req, &resp)
 		if err != nil || resp.Code != 0 {
-			log.Println("call Agent.ReportStatus fail:", err, "Request:", req, "Response:", resp)
+			log.Info("call Agent.ReportStatus fail:", err, "Request:", req, "Response:", resp)
 		}
 
 		time.Sleep(interval)

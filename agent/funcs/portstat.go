@@ -2,9 +2,9 @@ package funcs
 
 import (
 	"fmt"
-	"log"
+	log "github.com/cihub/seelog"
 
-	"github.com/51idc/service-monitor/agent/g"
+	"github.com/anchnet/service-monitor/agent/g"
 	"github.com/open-falcon/common/model"
 	"github.com/toolkits/nux"
 	"github.com/toolkits/slice"
@@ -20,7 +20,7 @@ func PortMetrics() (L []*model.MetricValue) {
 
 	allListeningPorts, err := nux.ListeningPorts()
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 		return
 	}
 

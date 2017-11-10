@@ -2,7 +2,7 @@ package funcs
 
 import (
 	"fmt"
-	"log"
+	log "github.com/cihub/seelog"
 
 	"github.com/open-falcon/common/model"
 	"github.com/toolkits/nux"
@@ -12,7 +12,7 @@ func DeviceMetrics() (L []*model.MetricValue) {
 	mountPoints, err := nux.ListMountPoint()
 
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 		return
 	}
 
@@ -23,7 +23,7 @@ func DeviceMetrics() (L []*model.MetricValue) {
 		var du *nux.DeviceUsage
 		du, err = nux.BuildDeviceUsage(mountPoints[idx][0], mountPoints[idx][1], mountPoints[idx][2])
 		if err != nil {
-			log.Println(err)
+			log.Info(err)
 			continue
 		}
 

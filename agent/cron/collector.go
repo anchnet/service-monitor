@@ -3,8 +3,8 @@ package cron
 import (
 	"time"
 
-	"github.com/51idc/service-monitor/agent/funcs"
-	"github.com/51idc/service-monitor/agent/g"
+	"github.com/anchnet/service-monitor/agent/funcs"
+	"github.com/anchnet/service-monitor/agent/g"
 	"github.com/open-falcon/common/model"
 )
 

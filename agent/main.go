@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/51idc/service-monitor/agent/cron"
-	"github.com/51idc/service-monitor/agent/funcs"
-	"github.com/51idc/service-monitor/agent/g"
-	"github.com/51idc/service-monitor/agent/http"
+	"github.com/anchnet/service-monitor/agent/cron"
+	"github.com/anchnet/service-monitor/agent/funcs"
+	"github.com/anchnet/service-monitor/agent/g"
+	"github.com/anchnet/service-monitor/agent/http"
 )
 
 func main() {
@@ -30,6 +30,9 @@ func main() {
 	}
 
 	g.ParseConfig(*cfg)
+
+	//init seelog
+	g.InitSeeLog()
 
 	g.InitRootDir()
 	g.InitLocalIps()

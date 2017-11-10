@@ -1,7 +1,7 @@
 package funcs
 
 import (
-	"log"
+	log "github.com/cihub/seelog"
 
 	"github.com/open-falcon/common/model"
 	"github.com/toolkits/nux"
@@ -10,7 +10,7 @@ import (
 func LoadAvgMetrics() []*model.MetricValue {
 	load, err := nux.LoadAvg()
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 		return nil
 	}
 

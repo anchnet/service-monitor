@@ -1,7 +1,7 @@
 package funcs
 
 import (
-	"log"
+	log "github.com/cihub/seelog"
 
 	"github.com/open-falcon/common/model"
 	"github.com/toolkits/nux"
@@ -11,7 +11,7 @@ func KernelMetrics() (L []*model.MetricValue) {
 
 	maxFiles, err := nux.KernelMaxFiles()
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 		return
 	}
 
@@ -19,7 +19,7 @@ func KernelMetrics() (L []*model.MetricValue) {
 
 	maxProc, err := nux.KernelMaxProc()
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 		return
 	}
 
@@ -27,7 +27,7 @@ func KernelMetrics() (L []*model.MetricValue) {
 
 	allocateFiles, err := nux.KernelAllocateFiles()
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 		return
 	}
 

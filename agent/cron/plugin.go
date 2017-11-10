@@ -1,12 +1,12 @@
 package cron
 
 import (
-	"log"
+	log "github.com/cihub/seelog"
 	"strings"
 	"time"
 
-	"github.com/51idc/service-monitor/agent/g"
-	"github.com/51idc/service-monitor/agent/plugins"
+	"github.com/anchnet/service-monitor/agent/g"
+	"github.com/anchnet/service-monitor/agent/plugins"
 	"github.com/open-falcon/common/model"
 )
 
@@ -50,7 +50,7 @@ func syncMinePlugins() {
 		var resp model.AgentPluginsResponse
 		err = g.HbsClient.Call("Agent.MinePlugins", req, &resp)
 		if err != nil {
-			log.Println("ERROR:", err)
+			log.Info("ERROR:", err)
 			continue
 		}
 
@@ -62,7 +62,7 @@ func syncMinePlugins() {
 		timestamp = resp.Timestamp
 
 		if g.Config().Debug {
-			log.Println(&resp)
+			log.Info(&resp)
 		}
 
 		if len(pluginDirs) == 0 {

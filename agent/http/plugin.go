@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"os/exec"
 
-	"github.com/51idc/service-monitor/agent/g"
-	"github.com/51idc/service-monitor/agent/plugins"
+	"github.com/anchnet/service-monitor/agent/g"
+	"github.com/anchnet/service-monitor/agent/plugins"
 	"github.com/toolkits/file"
 )
 

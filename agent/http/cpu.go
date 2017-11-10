@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"runtime"
 
-	"github.com/51idc/service-monitor/agent/funcs"
+	"github.com/anchnet/service-monitor/agent/funcs"
 	"github.com/toolkits/nux"
 )
 

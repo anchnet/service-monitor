@@ -1,12 +1,12 @@
 package cron
 
 import (
-	"log"
+	log "github.com/cihub/seelog"
 	"strconv"
 	"strings"
 	"time"
 
-	"github.com/51idc/service-monitor/agent/g"
+	"github.com/anchnet/service-monitor/agent/g"
 	"github.com/open-falcon/common/model"
 )
 
@@ -44,7 +44,7 @@ func syncBuiltinMetrics() {
 		var resp model.BuiltinMetricResponse
 		err = g.HbsClient.Call("Agent.BuiltinMetrics", req, &resp)
 		if err != nil {
-			log.Println("ERROR:", err)
+			log.Info("ERROR:", err)
 			continue
 		}
 
@@ -77,7 +77,7 @@ func syncBuiltinMetrics() {
 				if _, err := strconv.ParseInt(stime[1], 10, 64); err == nil {
 					urls[url[1]] = stime[1]
 				} else {
-					log.Println("metric ParseInt timeout failed:", err)
+					log.Info("metric ParseInt timeout failed:", err)
 				}
 			}
 
@@ -90,7 +90,7 @@ func syncBuiltinMetrics() {
 				if port, err := strconv.ParseInt(arr[1], 10, 64); err == nil {
 					ports = append(ports, port)
 				} else {
-					log.Println("metrics ParseInt failed:", err)
+					log.Info("metrics ParseInt failed:", err)
 				}
 
 				continue

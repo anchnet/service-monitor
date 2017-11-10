@@ -2,7 +2,7 @@ package funcs
 
 import (
 	"fmt"
-	"log"
+	log "github.com/cihub/seelog"
 	"os/exec"
 	"strconv"
 	"strings"
@@ -10,7 +10,7 @@ import (
 	sigar "github.com/elastic/gosigar"
 	"github.com/open-falcon/common/model"
 	"github.com/toolkits/nux"
-	"github.com/51idc/service-monitor/agent/g"
+	"github.com/anchnet/service-monitor/agent/g"
 )
 
 type ProcUsage struct {
@@ -35,7 +35,7 @@ func GetProcCpuP() (map[int]float64, error) {
 				pid, err := strconv.Atoi(fields[0])
 				cpuP, err := strconv.ParseFloat(fields[8], 64)
 				if err != nil {
-					log.Println(err)
+					log.Info(err)
 					continue
 				}
 				pidCPUP[pid] = cpuP
@@ -69,7 +69,7 @@ func ProcPrecents() (map[string]ProcUsage, map[string]ProcUsage, error) {
 			continue
 		}
 		if err := mem.Get(pid); err != nil {
-			log.Println("error getting process mem for pid=%d: %v", pid, err)
+			log.Info("error getting process mem for pid=%d: %v", pid, err)
 			continue
 		}
 		if proc_cmdline, ok := procusage_cmdline[cmdline]; ok {
@@ -99,7 +99,7 @@ func ProcPrecents() (map[string]ProcUsage, map[string]ProcUsage, error) {
 			procusage_name[name] = proc_name
 		}
 		if name == "falcon-swcollec" {
-			log.Println(procusage_name[name])
+			log.Info(procusage_name[name])
 		}
 	}
 	return procusage_name, procusage_cmdline, nil
@@ -107,7 +107,7 @@ func ProcPrecents() (map[string]ProcUsage, map[string]ProcUsage, error) {
 func ProcPreMetrics() (L []*model.MetricValue) {
 	psusage_name, psusage_cmdline, err := ProcPrecents()
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 		return
 	}
 	process_map := g.Config().Process

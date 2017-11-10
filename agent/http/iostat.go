@@ -3,7 +3,7 @@ package http
 import (
 	"net/http"
 
-	"github.com/51idc/service-monitor/agent/funcs"
+	"github.com/anchnet/service-monitor/agent/funcs"
 )
 
 func configIoStatRoutes() {

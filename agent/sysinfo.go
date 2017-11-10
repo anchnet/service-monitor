@@ -5,7 +5,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"log"
+	log "github.com/cihub/seelog"
 	"net/http"
 	"os"
 	"os/exec"
@@ -14,7 +14,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/51idc/service-monitor/agent/g"
+	"github.com/anchnet/service-monitor/agent/g"
 )
 
 type SysInfo struct {
@@ -29,10 +29,10 @@ func ReportSysInfo() {
 	go func() {
 		for {
 			if err := reportSysInfo(); err == nil {
-				log.Println("report sysinfo success")
+				log.Info("report sysinfo success")
 				break
 			}
-			log.Println("report sysinfo fail")
+			log.Info("report sysinfo fail")
 			time.Sleep(time.Minute)
 		}
 	}()
@@ -45,7 +45,7 @@ func reportSysInfo() error {
 	osVersion := getOSVersion()
 	hostname, err := g.Hostname()
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 		hostname = ""
 	}
 
@@ -57,7 +57,7 @@ func reportSysInfo() error {
 		OSVersion: osVersion,
 	}
 	if g.Config().Debug {
-		log.Println("sysinfo report: ", sysinfo)
+		log.Info("sysinfo report: ", sysinfo)
 	}
 	b := new(bytes.Buffer)
 	json.NewEncoder(b).Encode(sysinfo)
@@ -82,7 +82,7 @@ func getCpuInfo() int {
 
 	file, err := os.Open("/proc/cpuinfo")
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 		return 0
 	}
 	defer file.Close()
@@ -96,7 +96,7 @@ func getCpuInfo() int {
 		}
 	}
 	if err := scanner.Err(); err != nil {
-		log.Println(err)
+		log.Info(err)
 		return 0
 	}
 	return cores
@@ -105,7 +105,7 @@ func getCpuInfo() int {
 func getMemInfo() int {
 	file, err := os.Open("/proc/meminfo")
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 		return 0
 	}
 	defer file.Close()
@@ -121,7 +121,7 @@ func getMemInfo() int {
 		}
 	}
 	if err := scanner.Err(); err != nil {
-		log.Println(err)
+		log.Info(err)
 		return 0
 	}
 	return 0
@@ -130,7 +130,7 @@ func getMemInfo() int {
 func getKernelInfo() string {
 	out, err := exec.Command("uname", "-r").Output()
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 		return ""
 	}
 	return string(out[:])
@@ -139,7 +139,7 @@ func getKernelInfo() string {
 func getOSVersion() string {
 	out, err := exec.Command("cat", "/etc/issue").Output()
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 		return ""
 	}
 	return string(out[:])

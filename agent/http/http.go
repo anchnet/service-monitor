@@ -2,11 +2,11 @@ package http
 
 import (
 	"encoding/json"
-	"log"
+	log "github.com/cihub/seelog"
 	"net/http"
 	_ "net/http/pprof"
 
-	"github.com/51idc/service-monitor/agent/g"
+	"github.com/anchnet/service-monitor/agent/g"
 )
 
 type Dto struct {
@@ -72,6 +72,6 @@ func Start() {
 		MaxHeaderBytes: 1 << 30,
 	}
 
-	log.Println("listening", addr)
-	log.Fatalln(s.ListenAndServe())
+	log.Info("listening", addr)
+	log.Error(s.ListenAndServe())
 }

@@ -1,11 +1,11 @@
 package funcs
 
 import (
-	"log"
+	log "github.com/cihub/seelog"
 	"strconv"
 	"strings"
 
-	"github.com/51idc/service-monitor/agent/g"
+	"github.com/anchnet/service-monitor/agent/g"
 	"github.com/open-falcon/common/model"
 	"github.com/toolkits/sys"
 )
@@ -15,7 +15,7 @@ func DuMetrics() (L []*model.MetricValue) {
 	for _, path := range paths {
 		out, err := sys.CmdOutNoLn("du", "-bs", path)
 		if err != nil {
-			log.Println("du -bs", path, "fail", err)
+			log.Info("du -bs", path, "fail", err)
 			continue
 		}
 
@@ -26,7 +26,7 @@ func DuMetrics() (L []*model.MetricValue) {
 
 		size, err := strconv.ParseUint(arr[0], 10, 64)
 		if err != nil {
-			log.Println("cannot parse du -bs", path, "output")
+			log.Info("cannot parse du -bs", path, "output")
 			continue
 		}
 

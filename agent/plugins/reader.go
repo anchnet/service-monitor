@@ -2,12 +2,12 @@ package plugins
 
 import (
 	"io/ioutil"
-	"log"
+	log "github.com/cihub/seelog"
 	"path/filepath"
 	"strconv"
 	"strings"
 
-	"github.com/51idc/service-monitor/agent/g"
+	"github.com/anchnet/service-monitor/agent/g"
 	"github.com/toolkits/file"
 )
 
@@ -26,7 +26,7 @@ func ListPlugins(relativePath string) map[string]*Plugin {
 
 	fs, err := ioutil.ReadDir(dir)
 	if err != nil {
-		log.Println("can not list files under", dir)
+		log.Info("can not list files under", dir)
 		return ret
 	}
 

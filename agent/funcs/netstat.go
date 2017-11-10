@@ -1,7 +1,7 @@
 package funcs
 
 import (
-	"log"
+	log "github.com/cihub/seelog"
 
 	"github.com/open-falcon/common/model"
 	"github.com/toolkits/nux"
@@ -37,7 +37,7 @@ func NetstatMetrics() (L []*model.MetricValue) {
 	tcpExts, err := nux.Netstat("TcpExt")
 
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 		return
 	}
 

@@ -1,9 +1,9 @@
 package funcs
 
 import (
-	"log"
+	log "github.com/cihub/seelog"
 
-	"github.com/51idc/service-monitor/agent/g"
+	"github.com/anchnet/service-monitor/agent/g"
 	"github.com/open-falcon/common/model"
 	"github.com/toolkits/nux"
 )
@@ -16,7 +16,7 @@ func CoreNetMetrics(ifacePrefix []string) []*model.MetricValue {
 
 	netIfs, err := nux.NetIfs(ifacePrefix)
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 		return []*model.MetricValue{}
 	}
 

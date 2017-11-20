@@ -2,9 +2,10 @@ package g
 
 import (
 	"encoding/json"
-	"log"
 	"os"
 	"sync"
+
+	log "github.com/cihub/seelog"
 
 	"github.com/toolkits/file"
 )
@@ -23,10 +24,10 @@ type SmartAPIConfig struct {
 }
 
 type TransferConfig struct {
-	Enabled  bool   `json:"enabled"`
+	Enabled  bool     `json:"enabled"`
 	Addrs    []string `json:"addrs"`
-	Interval int    `json:"interval"`
-	Timeout  int    `json:"timeout"`
+	Interval int      `json:"interval"`
+	Timeout  int      `json:"timeout"`
 }
 
 type HttpConfig struct {
@@ -63,31 +64,31 @@ func Hostname() (string, error) {
 
 	hostname, err := os.Hostname()
 	if err != nil {
-		log.Println("ERROR: os.Hostname() fail", err)
+		log.Info("ERROR: os.Hostname() fail", err)
 	}
 	return hostname, err
 }
 
 func ParseConfig(cfg string) {
 	if cfg == "" {
-		log.Fatalln("use -c to specify configuration file")
+		log.Error("use -c to specify configuration file")
 	}
 
 	if !file.IsExist(cfg) {
-		log.Fatalln("config file:", cfg, "is not existent. maybe you need `mv cfg.example.json cfg.json`")
+		log.Error("config file:", cfg, "is not existent. maybe you need `mv cfg.example.json cfg.json`")
 	}
 
 	ConfigFile = cfg
 
 	configContent, err := file.ToTrimString(cfg)
 	if err != nil {
-		log.Fatalln("read config file:", cfg, "fail:", err)
+		log.Error("read config file:", cfg, "fail:", err)
 	}
 
 	var c GlobalConfig
 	err = json.Unmarshal([]byte(configContent), &c)
 	if err != nil {
-		log.Fatalln("parse config file:", cfg, "fail:", err)
+		log.Error("parse config file:", cfg, "fail:", err)
 	}
 
 	lock.Lock()
@@ -95,6 +96,6 @@ func ParseConfig(cfg string) {
 
 	config = &c
 
-	log.Println("read config file:", cfg, "successfully")
+	log.Info("read config file:", cfg, "successfully")
 
 }

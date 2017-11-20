@@ -10,3 +10,4 @@
 *.idea
 /gitversion
 redis-monitor
+debug

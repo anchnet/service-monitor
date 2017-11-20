@@ -2,11 +2,11 @@ package funcs
 
 import (
 	"fmt"
-	"log"
+	log "github.com/cihub/seelog"
 	"strconv"
 	"strings"
 
-	"github.com/51idc/service-monitor/redis-monitor/g"
+	"github.com/anchnet/service-monitor/redis-monitor/g"
 	"github.com/open-falcon/common/model"
 	"gopkg.in/redis.v4"
 )
@@ -42,7 +42,7 @@ func Redis_Info_Map(info string) map[string]string {
 
 func RedisMetrics() (L []*model.MetricValue) {
 	if !g.Config().Redis.Enabled {
-		log.Println("Redis Monitor is disabled")
+		log.Info("Redis Monitor is disabled")
 		return
 	}
 	Addr := g.Config().Redis.Addr
@@ -51,7 +51,7 @@ func RedisMetrics() (L []*model.MetricValue) {
 
 	info, err := GetRedisInfo(Addr, Password, DB)
 	if err != nil {
-		log.Println("Redis Connect Error: ", err)
+		log.Info("Redis Connect Error: ", err)
 		return
 	}
 	Port := strings.Split(Addr, ":")[1]
@@ -65,7 +65,7 @@ func RedisMetrics() (L []*model.MetricValue) {
 		if err == nil {
 			smartAPI_Push(smartAPI_url, endpoint, version, debug)
 		} else {
-			log.Println(err)
+			log.Info(err)
 		}
 	}
 	for index, value := range Redis_Info {
@@ -73,7 +73,7 @@ func RedisMetrics() (L []*model.MetricValue) {
 			if index == "uptime_in_seconds" {
 				value, err := strconv.ParseFloat(value, 64)
 				if err != nil {
-					log.Println(index, err)
+					log.Info(index, err)
 					continue
 				}
 				L = append(L, GaugeValue("Redis.Uptime", value, "Port="+Port))
@@ -83,7 +83,7 @@ func RedisMetrics() (L []*model.MetricValue) {
 			case "GUAGE":
 				value, err := strconv.ParseFloat(value, 64)
 				if err != nil {
-					log.Println(index, err)
+					log.Info(index, err)
 					continue
 				}
 				L = append(L, GaugeValue("Redis."+index, value, "Port="+Port))
@@ -92,7 +92,7 @@ func RedisMetrics() (L []*model.MetricValue) {
 						maxmemory := value
 						used_memory, err := strconv.ParseFloat(Redis_Info["used_memory"], 64)
 						if err != nil {
-							log.Println("used_memory", err)
+							log.Info("used_memory", err)
 						}
 						used_memory_per := used_memory / maxmemory
 						used_memory_pct := int(used_memory_per * 100)
@@ -102,7 +102,7 @@ func RedisMetrics() (L []*model.MetricValue) {
 			case "COUNTER":
 				value, err := strconv.ParseFloat(value, 64)
 				if err != nil {
-					log.Println(index, err)
+					log.Info(index, err)
 					continue
 				}
 				L = append(L, CounterValue("Redis."+index, value, "Port="+Port))

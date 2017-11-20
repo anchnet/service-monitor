@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/51idc/service-monitor/apache-monitor/cron"
-	"github.com/51idc/service-monitor/apache-monitor/funcs"
-	"github.com/51idc/service-monitor/apache-monitor/g"
-	"github.com/51idc/service-monitor/apache-monitor/http"
+	"github.com/anchnet/service-monitor/apache-monitor/cron"
+	"github.com/anchnet/service-monitor/apache-monitor/funcs"
+	"github.com/anchnet/service-monitor/apache-monitor/g"
+	"github.com/anchnet/service-monitor/apache-monitor/http"
 )
 
 func main() {
@@ -28,6 +28,9 @@ func main() {
 
 	//g.InitRootDir()
 	//g.InitRpcClients()
+
+	//init seelog
+	g.InitSeeLog()
 
 	if *check {
 		funcs.CheckCollector()

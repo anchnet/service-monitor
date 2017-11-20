@@ -1,7 +1,7 @@
 package funcs
 
 import (
-	"github.com/51idc/service-monitor/apache-monitor/g"
+	"github.com/anchnet/service-monitor/apache-monitor/g"
 	"github.com/open-falcon/common/model"
 )
 

@@ -2,12 +2,12 @@ package funcs
 
 import (
 	"io/ioutil"
-	"log"
+	log "github.com/cihub/seelog"
 	"net/http"
 	"strconv"
 	"strings"
 
-	"github.com/51idc/service-monitor/apache-monitor/g"
+	"github.com/anchnet/service-monitor/apache-monitor/g"
 	"github.com/PuerkitoBio/goquery"
 	"github.com/open-falcon/common/model"
 )
@@ -51,7 +51,7 @@ func apache_status(body string) (map[string]float64, error) {
 	var value float64
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("Apache Recovered in Panic", r)
+			log.Info("Apache Recovered in Panic", r)
 		}
 	}()
 	str := strings.Split(body, "\n")
@@ -85,7 +85,7 @@ func apache_status(body string) (map[string]float64, error) {
 
 func ApacheMetrics() (L []*model.MetricValue) {
 	if !g.Config().Apache.Enabled {
-		log.Println("Apache Monitor is disabled")
+		log.Info("Apache Monitor is disabled")
 		return
 	}
 	url := g.Config().Apache.Staturl
@@ -100,22 +100,22 @@ func ApacheMetrics() (L []*model.MetricValue) {
 		if err == nil {
 			smartAPI_Push(smartAPI_url, endpoint, version, debug)
 		} else {
-			log.Println(err)
+			log.Info(err)
 		}
 	}
 
 	respbody, resp_code, err := httpGet(staturl)
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 		return
 	}
 	if resp_code != 200 {
-		log.Println("Http Statu Page Open Error")
+		log.Info("Http Statu Page Open Error")
 		return
 	}
 	stat, err := apache_status(respbody)
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 		return
 	}
 

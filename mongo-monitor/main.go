@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/51idc/service-monitor/mongo-monitor/cron"
-	"github.com/51idc/service-monitor/mongo-monitor/funcs"
-	"github.com/51idc/service-monitor/mongo-monitor/g"
-	"github.com/51idc/service-monitor/mongo-monitor/http"
+	"github.com/anchnet/service-monitor/mongo-monitor/cron"
+	"github.com/anchnet/service-monitor/mongo-monitor/funcs"
+	"github.com/anchnet/service-monitor/mongo-monitor/g"
+	"github.com/anchnet/service-monitor/mongo-monitor/http"
 )
 
 func main() {
@@ -25,6 +25,9 @@ func main() {
 	}
 
 	g.ParseConfig(*cfg)
+
+	//init seelog
+	g.InitSeeLog()
 
 	//g.InitRootDir()
 	//g.InitRpcClients()

@@ -4,8 +4,6 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"log"
-	"os"
 	"reflect"
 	"runtime"
 	"strconv"
@@ -16,8 +14,6 @@ import (
 	"github.com/go-ole/go-ole"
 	"github.com/go-ole/go-ole/oleutil"
 )
-
-var l = log.New(os.Stdout, "", log.LstdFlags)
 
 var (
 	ErrInvalidEntityType = errors.New("wmi: invalid entity type")

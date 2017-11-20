@@ -2,15 +2,15 @@ package funcs
 
 import (
 	"fmt"
-	"log"
+	log "github.com/cihub/seelog"
 
 	"time"
 
-	//	"github.com/51idc/service-monitor/windows-agent/g"
+	//	"github.com/anchnet/service-monitor/windows-agent/g"
 	sigar "github.com/elastic/gosigar"
 	"github.com/open-falcon/common/model"
 	"github.com/shirou/gopsutil/process"
-	"github.com/51idc/service-monitor/windows-agent/g"
+	"github.com/anchnet/service-monitor/windows-agent/g"
 	"strings"
 )
 
@@ -63,13 +63,13 @@ func GetProcCpuTime(pids []int32) map[int]ProcTime {
 		err := procCpu.Get(int(pid))
 		if err != nil {
 			//		if g.Config().Debug {
-			//		log.Printf("error getting process cpu time for pid=%d: %v", pid, err)
+			//		log.Infof("error getting process cpu time for pid=%d: %v", pid, err)
 			//		}
 			continue
 		}
 		err = cpu.Get()
 		if err != nil {
-			log.Println("error getting cpu time for Total: ", err)
+			log.Info("error getting cpu time for Total: ", err)
 			continue
 		}
 
@@ -105,7 +105,7 @@ func ProcPrecents() (map[string]ProcUsage, map[string]ProcUsage, error) {
 
 	ps, pids, err := Processes()
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 	}
 
 	procusage_cmdline := map[string]ProcUsage{}
@@ -127,7 +127,7 @@ func ProcPrecents() (map[string]ProcUsage, map[string]ProcUsage, error) {
 		}
 		if err := mem.Get(pid); err != nil {
 			//	if g.Config().Debug {
-			//	log.Printf("error getting process mem for pid=%d,name=%s: %v", pid, name, err)
+			//	log.Infof("error getting process mem for pid=%d,name=%s: %v", pid, name, err)
 			//		}
 			continue
 		}
@@ -160,7 +160,7 @@ func ProcPreMetrics() (L []*model.MetricValue) {
 	startTime := time.Now()
 	psusage_name, psusage_cmdline, err := ProcPrecents()
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 		return
 	}
 	process_map := g.Config().Process
@@ -202,6 +202,6 @@ func ProcPreMetrics() (L []*model.MetricValue) {
 	}
 
 	endTime := time.Now()
-	log.Printf("UpdateProcessStats complete. Process time %s.", endTime.Sub(startTime))
+	log.Infof("UpdateProcessStats complete. Process time %s.", endTime.Sub(startTime))
 	return
 }

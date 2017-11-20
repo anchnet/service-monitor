@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/51idc/service-monitor/windows-agent/cron"
-	"github.com/51idc/service-monitor/windows-agent/funcs"
-	"github.com/51idc/service-monitor/windows-agent/g"
+	"github.com/anchnet/service-monitor/windows-agent/cron"
+	"github.com/anchnet/service-monitor/windows-agent/funcs"
+	"github.com/anchnet/service-monitor/windows-agent/g"
 )
 
 func main() {
@@ -24,6 +24,9 @@ func main() {
 	}
 
 	g.ParseConfig(*cfg)
+
+	//init seelog
+	g.InitSeeLog()
 
 	if *check {
 		funcs.CheckCollector()

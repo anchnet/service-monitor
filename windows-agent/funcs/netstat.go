@@ -1,7 +1,7 @@
 package funcs
 
 import (
-	"log"
+	log "github.com/cihub/seelog"
 	"os/exec"
 	"strings"
 
@@ -51,7 +51,7 @@ func GetNetStat() (map[string]uint64, error) {
 func NetstatMetrics() (L []*model.MetricValue) {
 	tcpstatus, err := GetNetStat()
 	if err != nil {
-		log.Println("Get netstat error", err)
+		log.Info("Get netstat error", err)
 		return
 	}
 

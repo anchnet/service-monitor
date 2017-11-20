@@ -1,7 +1,7 @@
 package funcs
 
 import (
-	"github.com/51idc/service-monitor/windows-agent/g"
+	"github.com/anchnet/service-monitor/windows-agent/g"
 	"github.com/open-falcon/common/model"
 )
 

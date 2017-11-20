@@ -1,16 +1,16 @@
 package funcs
 
 import (
-	"log"
+	log "github.com/cihub/seelog"
 
-	"github.com/51idc/service-monitor/windows-agent/tools/mem"
+	"github.com/anchnet/service-monitor/windows-agent/tools/mem"
 	"github.com/open-falcon/common/model"
 )
 
 func MemMetrics() []*model.MetricValue {
 	m, err := mem.VirtualMemory()
 	if err != nil {
-		log.Println("Get memory fail: ", err)
+		log.Info("Get memory fail: ", err)
 		return nil
 	}
 

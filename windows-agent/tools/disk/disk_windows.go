@@ -7,10 +7,10 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/51idc/service-monitor/windows-agent/tools/wmi"
+	"github.com/anchnet/service-monitor/windows-agent/tools/wmi"
 
-	"github.com/51idc/service-monitor/windows-agent/tools/internal/common"
-	"log"
+	"github.com/anchnet/service-monitor/windows-agent/tools/internal/common"
+	log "github.com/cihub/seelog"
 )
 
 var (
@@ -51,7 +51,7 @@ func DiskUsage(path string) (*DiskUsageStat, error) {
 	if diskret == 0 {
 		return nil, err
 	}
-	log.Println("diskret: ", diskret, " cur path:", path)
+	log.Info("diskret: ", diskret, " cur path:", path)
 	ret = &DiskUsageStat{
 		Path:        path,
 		Total:       uint64(lpTotalNumberOfBytes),
@@ -63,7 +63,7 @@ func DiskUsage(path string) (*DiskUsageStat, error) {
 		// InodesUsed: 0,
 		// InodesUsedPercent: 0,
 	}
-	log.Println("ret: ", ret)
+	log.Info("ret: ", ret)
 	return ret, nil
 }
 

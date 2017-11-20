@@ -1,9 +1,9 @@
 package funcs
 
 import (
-	"log"
+	log "github.com/cihub/seelog"
 
-	"github.com/51idc/service-monitor/windows-agent/tools/net"
+	"github.com/anchnet/service-monitor/windows-agent/tools/net"
 	"github.com/open-falcon/common/model"
 )
 
@@ -15,7 +15,7 @@ func CoreNetMetrics() []*model.MetricValue {
 
 	netIfs, err := net.NetIOCounters(true)
 	if err != nil {
-		log.Println("Get netInfo fail: ", err)
+		log.Info("Get netInfo fail: ", err)
 		return []*model.MetricValue{}
 	}
 

@@ -4,10 +4,10 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"log"
+	log "github.com/cihub/seelog"
 	"net/http"
 
-	"github.com/51idc/service-monitor/windows-agent/g"
+	"github.com/anchnet/service-monitor/windows-agent/g"
 
 	"os/exec"
 	"strconv"
@@ -27,10 +27,10 @@ func ReportSysInfo() {
 	go func() {
 		for {
 			if err := reportSysInfo(); err == nil {
-				log.Println("report sysinfo success")
+				log.Info("report sysinfo success")
 				break
 			}
-			log.Println("report sysinfo fail")
+			log.Info("report sysinfo fail")
 			time.Sleep(time.Minute)
 		}
 	}()
@@ -44,7 +44,7 @@ func reportSysInfo() error {
 	osVersion := getOSVersion()
 	hostname, err := g.Hostname()
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 		hostname = ""
 	}
 	sysinfo := SysInfo{
@@ -55,7 +55,7 @@ func reportSysInfo() error {
 		OSVersion: osVersion,
 	}
 	if g.Config().Debug {
-		log.Println("sysinfo report: ", sysinfo)
+		log.Info("sysinfo report: ", sysinfo)
 	}
 
 	b := new(bytes.Buffer)
@@ -80,7 +80,7 @@ func reportSysInfo() error {
 func sysInfoInit() {
 	err := exec.Command("chcp", "65001").Run()
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 	}
 }
 
@@ -88,13 +88,13 @@ func getCpuInfo() int {
 
 	out, err := exec.Command("wmic", "cpu", "get", "numberofcores").Output()
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 		return 0
 	}
 	line := strings.Split(string(out), "\r\n")[1]
 	cores, err := strconv.Atoi(strings.TrimSpace(line))
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 	}
 	return cores
 }
@@ -102,13 +102,13 @@ func getCpuInfo() int {
 func getMemInfo() int {
 	out, err := exec.Command("wmic", "memorychip", "get", "Capacity").Output()
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 		return 0
 	}
 	line := strings.Split(string(out), "\r\n")[1]
 	mem, err := strconv.Atoi(strings.TrimSpace(line))
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 		return 0
 	}
 	return mem / 1024.0
@@ -117,7 +117,7 @@ func getMemInfo() int {
 func getKernelInfo() string {
 	out, err := exec.Command("systeminfo").Output()
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 		return ""
 	}
 	kernel := strings.Split(string(out[:]), "\r\n")[3]
@@ -128,7 +128,7 @@ func getKernelInfo() string {
 func getOSVersion() string {
 	out, err := exec.Command("systeminfo").Output()
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 		return ""
 	}
 	osVersion := strings.Split(string(out[:]), "\r\n")[2]

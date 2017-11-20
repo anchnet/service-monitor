@@ -6,9 +6,9 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/51idc/service-monitor/windows-agent/tools/wmi"
+	"github.com/anchnet/service-monitor/windows-agent/tools/wmi"
 
-	"github.com/51idc/service-monitor/windows-agent/tools/internal/common"
+	"github.com/anchnet/service-monitor/windows-agent/tools/internal/common"
 )
 
 type Win32_Processor struct {

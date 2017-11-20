@@ -8,7 +8,7 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/51idc/service-monitor/windows-agent/tools/internal/common"
+	"github.com/anchnet/service-monitor/windows-agent/tools/internal/common"
 )
 
 var invoke common.Invoker

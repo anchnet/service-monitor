@@ -1,9 +1,9 @@
 package funcs
 
 import (
-	"log"
+	log "github.com/cihub/seelog"
 
-	"github.com/51idc/service-monitor/windows-agent/tools/load"
+	"github.com/anchnet/service-monitor/windows-agent/tools/load"
 	"github.com/open-falcon/common/model"
 )
 
@@ -11,7 +11,7 @@ func LoadMetrics() (L []*model.MetricValue) {
 
 	loadVal, err := load.LoadAvg()
 	if err != nil {
-		log.Println("Get load fail: ", err)
+		log.Info("Get load fail: ", err)
 		return nil
 	}
 

@@ -12,7 +12,7 @@ It is a golang classic project
 
 ```
 # set $GOPATH and $GOROOT
-git clone https://github.com/51idc/service-monitor/windows-agent
+git clone https://github.com/anchnet/service-monitor/windows-agent
 cd agent
 go build
 start.bat //启动

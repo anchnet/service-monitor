@@ -3,7 +3,7 @@ package funcs
 import (
 	"fmt"
 	"github.com/open-falcon/common/model"
-	"log"
+	log "github.com/cihub/seelog"
 	"os/exec"
 	"strings"
 	"time"
@@ -17,7 +17,7 @@ func UptimeMetrics() []*model.MetricValue {
 
 	loc, err := time.LoadLocation("Local")
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 	}
 
 	year := boot[0:4]
@@ -30,7 +30,7 @@ func UptimeMetrics() []*model.MetricValue {
 	boottime := fmt.Sprintf("%s-%s-%sT%s:%s:%sZ", year, month, day, h, m, s)
 	bootDate, err := time.ParseInLocation(time.RFC3339, boottime, loc)
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 	}
 
 	out, _ = exec.Command("wmic", "os", "get", "LocalDateTime").Output()
@@ -45,7 +45,7 @@ func UptimeMetrics() []*model.MetricValue {
 	nowtime := fmt.Sprintf("%s-%s-%sT%s:%s:%sZ", year, month, day, h, m, s)
 	nowDate, err := time.ParseInLocation(time.RFC3339, nowtime, loc)
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 	}
 
 	dlt := nowDate.Sub(bootDate)

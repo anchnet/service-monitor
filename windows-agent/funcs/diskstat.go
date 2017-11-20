@@ -1,9 +1,9 @@
 package funcs
 
 import (
-	"log"
+	log "github.com/cihub/seelog"
 
-	"github.com/51idc/service-monitor/windows-agent/tools/disk"
+	"github.com/anchnet/service-monitor/windows-agent/tools/disk"
 	"github.com/open-falcon/common/model"
 )
 
@@ -11,7 +11,7 @@ func DiskIOMetrics() (L []*model.MetricValue) {
 
 	dsList, err := disk.DiskIOCounters()
 	if err != nil {
-		log.Println("Get devices io fail: ", err)
+		log.Info("Get devices io fail: ", err)
 		return
 	}
 

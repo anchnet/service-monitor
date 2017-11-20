@@ -3,7 +3,7 @@ package funcs
 import (
 	"sync"
 
-	"github.com/51idc/service-monitor/windows-agent/tools/cpu"
+	"github.com/anchnet/service-monitor/windows-agent/tools/cpu"
 	"github.com/open-falcon/common/model"
 )
 

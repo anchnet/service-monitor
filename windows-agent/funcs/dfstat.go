@@ -2,16 +2,16 @@ package funcs
 
 import (
 	"fmt"
-	"log"
+	log "github.com/cihub/seelog"
 
-	"github.com/51idc/service-monitor/windows-agent/tools/disk"
+	"github.com/anchnet/service-monitor/windows-agent/tools/disk"
 	"github.com/open-falcon/common/model"
 )
 
 func DeviceMetrics() (L []*model.MetricValue) {
 	mountPoints, err := disk.DiskPartitions(false)
 	if err != nil {
-		log.Println("Get devices error", err)
+		log.Info("Get devices error", err)
 		return
 	}
 
@@ -21,7 +21,7 @@ func DeviceMetrics() (L []*model.MetricValue) {
 	for _, idx := range mountPoints {
 		du, err := disk.DiskUsage(idx.Mountpoint)
 		if err != nil {
-			log.Println("Get device fail: ", err)
+			log.Info("Get device fail: ", err)
 			continue
 		}
 		diskTotal += du.Total

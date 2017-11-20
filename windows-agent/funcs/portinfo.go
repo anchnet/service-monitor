@@ -2,10 +2,10 @@ package funcs
 
 import (
 	"github.com/open-falcon/common/model"
-	"log"
+	log "github.com/cihub/seelog"
 	"net"
 	"time"
-	"github.com/51idc/service-monitor/windows-agent/g"
+	"github.com/anchnet/service-monitor/windows-agent/g"
 )
 
 func PortMetrics() (L []*model.MetricValue) {
@@ -22,7 +22,7 @@ func port_dail(tcp_port string) int {
 	// 40s time out
 	conn, err := net.DialTimeout("tcp", tcpaddr, g.Config().DialTimeout * time.Second)
 	if err != nil {
-		log.Println("Port:" + tcp_port + ".DialTimeout error :", err)
+		log.Info("Port:" + tcp_port + ".DialTimeout error :", err)
 		return 0
 	}
 	conn.Close()

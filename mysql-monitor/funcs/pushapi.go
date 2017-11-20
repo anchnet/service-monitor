@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"io/ioutil"
-	"log"
+	log "github.com/cihub/seelog"
 	"net/http"
 )
 
@@ -30,7 +30,7 @@ func sendData(url string, data smartAPI_Data) ([]byte, int, error) {
 	}
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 		return nil, 0, err
 	}
 	defer res.Body.Close()
@@ -45,25 +45,25 @@ func smartAPI_Push(url string, endpoint string, version string, debug bool) {
 	data.Version = version
 	body, res, err := sendData(url, data)
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 		return
 	}
 	if res != 200 {
-		log.Println("smartAPI error,statcode= ", res)
+		log.Info("smartAPI error,statcode= ", res)
 		return
 	}
 
 	err = json.Unmarshal(body, &result)
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 		return
 	}
 	if result.Status != "ok" {
-		log.Println("SmartAPI return error: ", result.Message)
+		log.Info("SmartAPI return error: ", result.Message)
 		return
 	}
 	if debug {
-		log.Println("Push Version to SmartAPI Success: ", version)
+		log.Info("Push Version to SmartAPI Success: ", version)
 	}
 	return
 }

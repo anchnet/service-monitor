@@ -2,10 +2,10 @@ package funcs
 
 import (
 	"fmt"
-	"log"
+	log "github.com/cihub/seelog"
 	"time"
 
-	"github.com/51idc/service-monitor/mysql-monitor/g"
+	"github.com/anchnet/service-monitor/mysql-monitor/g"
 	"github.com/open-falcon/common/model"
 	"github.com/ziutek/mymysql/mysql"
 	_ "github.com/ziutek/mymysql/native"
@@ -61,7 +61,7 @@ func MysqlStatus(m *MysqlIns, username string, password string) ([]*MetaData, er
 
 func MysqlMetrics() (L []*model.MetricValue) {
 	if !g.Config().Mysql.Enabled {
-		log.Println("Mysql Monitor is disabled")
+		log.Info("Mysql Monitor is disabled")
 		return
 	}
 	Addr := g.Config().Mysql.Addr
@@ -84,20 +84,20 @@ func MysqlMetrics() (L []*model.MetricValue) {
 		if err == nil {
 			smartAPI_Push(smartAPI_url, endpoint, version, debug)
 		} else {
-			log.Println(err)
+			log.Info(err)
 		}
 	}
 	data, err := MysqlStatus(m, Username, Password)
 	if err != nil {
 		L = append(L, GaugeValue("mysql_alive_local", -1, m.Tag))
 		if debug {
-			log.Println("Mysql is not alive")
+			log.Info("Mysql is not alive")
 		}
 		return
 	}
 	L = append(L, GaugeValue("mysql_alive_local", 1, m.Tag))
 	if debug {
-		log.Println("Mysql is alive")
+		log.Info("Mysql is alive")
 	}
 	for _, mstat := range data {
 		if mstat.CounterType == "GAUGE" {

@@ -10,3 +10,4 @@
 *.idea
 /gitversion
 mssql-monitor.exe
+debug

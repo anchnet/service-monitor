@@ -3,10 +3,11 @@ package funcs
 import (
 	"database/sql"
 	"fmt"
-	"log"
 	"strings"
 
-	"github.com/51idc/service-monitor/mssql-monitor/g"
+	log "github.com/cihub/seelog"
+
+	"github.com/anchnet/service-monitor/mssql-monitor/g"
 	_ "github.com/denisenkom/go-mssqldb"
 	"github.com/open-falcon/common/model"
 )
@@ -29,7 +30,7 @@ func mssqlMetrics() (L []*model.MetricValue) {
 
 	db, err := mssql_conn(server, port, user, password, encrypt)
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 		return
 	}
 	defer db.Close()
@@ -44,7 +45,7 @@ func mssqlMetrics() (L []*model.MetricValue) {
 			version := result
 			smartAPI_Push(smartAPI_url, endpoint, version, debug)
 		} else {
-			g.Logger().Println(err)
+			log.Info(err)
 		}
 	}
 
@@ -52,19 +53,19 @@ func mssqlMetrics() (L []*model.MetricValue) {
 	if err == nil {
 		L = append(L, GaugeValue("MsSQL.Uptime", uptime))
 	} else {
-		g.Logger().Println(err)
+		log.Info(err)
 	}
 	conn, err := conn_query(db)
 	if err == nil {
 		L = append(L, GaugeValue("MsSQL.Connection", conn))
 	} else {
-		g.Logger().Println(err)
+		log.Info(err)
 	}
 	io_req, err := io_req_query(db)
 	if err == nil {
 		L = append(L, GaugeValue("MsSQL.IO_requests", io_req))
 	} else {
-		g.Logger().Println(err)
+		log.Info(err)
 	}
 	mssql_performance, err := performance_query(db, instance)
 	if err == nil {
@@ -77,7 +78,7 @@ func mssqlMetrics() (L []*model.MetricValue) {
 			}
 		}
 	} else {
-		g.Logger().Println(err)
+		log.Info(err)
 	}
 	return
 }
@@ -124,7 +125,7 @@ func version_query(db *sql.DB) (string, error) {
 	for rows.Next() {
 		err = rows.Scan(vals...)
 		if err != nil {
-			g.Logger().Println(err)
+			log.Info(err)
 			continue
 		}
 		v := vals[0].(*interface{})
@@ -157,7 +158,7 @@ func uptime_query(db *sql.DB) (int64, error) {
 	for rows.Next() {
 		err = rows.Scan(vals...)
 		if err != nil {
-			g.Logger().Println(err)
+			log.Info(err)
 			continue
 		}
 		v := vals[0].(*interface{})
@@ -190,7 +191,7 @@ func io_req_query(db *sql.DB) (float64, error) {
 	for rows.Next() {
 		err = rows.Scan(vals...)
 		if err != nil {
-			g.Logger().Println(err)
+			log.Info(err)
 			continue
 		}
 		v := vals[0].(*interface{})
@@ -222,7 +223,7 @@ func conn_query(db *sql.DB) (float64, error) {
 	for rows.Next() {
 		err = rows.Scan(vals...)
 		if err != nil {
-			g.Logger().Println(err)
+			log.Info(err)
 			continue
 		}
 		v := vals[0].(*interface{})
@@ -255,7 +256,7 @@ func performance_query(db *sql.DB, instance []string) ([]mssql, error) {
 	for rows.Next() {
 		err = rows.Scan(vals...)
 		if err != nil {
-			g.Logger().Println(err)
+			log.Info(err)
 			continue
 		}
 		v1 := vals[1].(*interface{})

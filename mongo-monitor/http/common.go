@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/51idc/service-monitor/mongo-monitor/g"
+	"github.com/anchnet/service-monitor/mongo-monitor/g"
 	"github.com/toolkits/file"
 )
 

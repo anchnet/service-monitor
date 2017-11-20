@@ -10,3 +10,4 @@
 *.idea
 /gitversion
 mongo-monitor
+debug

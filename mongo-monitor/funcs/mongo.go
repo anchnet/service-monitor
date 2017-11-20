@@ -1,15 +1,15 @@
 package funcs
 
 import (
-	"log"
+	log "github.com/cihub/seelog"
 
-	"github.com/51idc/service-monitor/mongo-monitor/g"
+	"github.com/anchnet/service-monitor/mongo-monitor/g"
 	"github.com/open-falcon/common/model"
 )
 
 func MongoMetrics() (L []*model.MetricValue) {
 	if !g.Config().Mongo.Enabled {
-		log.Println("Mongo Monitor is disabled")
+		log.Info("Mongo Monitor is disabled")
 		return
 	}
 	Addr := g.Config().Mongo.Addr
@@ -19,7 +19,7 @@ func MongoMetrics() (L []*model.MetricValue) {
 
 	serverStatus, err := mongo_serverStatus(Addr, Authdb, Username, Password)
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 		return
 	}
 
@@ -32,7 +32,7 @@ func MongoMetrics() (L []*model.MetricValue) {
 		if err == nil {
 			smartAPI_Push(smartAPI_url, endpoint, version, debug)
 		} else {
-			log.Println(err)
+			log.Info(err)
 		}
 	}
 	CounterMetrics, GaugeMetrics := mongo_Metrics(serverStatus)

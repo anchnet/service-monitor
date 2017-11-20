@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/51idc/service-monitor/iis-monitor/cron"
-	"github.com/51idc/service-monitor/iis-monitor/funcs"
-	"github.com/51idc/service-monitor/iis-monitor/g"
-	"github.com/51idc/service-monitor/iis-monitor/http"
+	"github.com/anchnet/service-monitor/iis-monitor/cron"
+	"github.com/anchnet/service-monitor/iis-monitor/funcs"
+	"github.com/anchnet/service-monitor/iis-monitor/g"
+	"github.com/anchnet/service-monitor/iis-monitor/http"
 )
 
 func main() {
@@ -24,7 +24,11 @@ func main() {
 	}
 
 	g.ParseConfig(*cfg)
-	g.InitLog()
+
+	//init seelog
+	g.InitSeeLog()
+	// rm g.InitLog()
+
 	g.InitRootDir()
 	//g.InitRpcClients()
 

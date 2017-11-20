@@ -8,9 +8,10 @@ import (
 	"os/exec"
 	"strings"
 
+	log "github.com/cihub/seelog"
 	"github.com/toolkits/file"
 
-	"github.com/51idc/service-monitor/iis-monitor/g"
+	"github.com/anchnet/service-monitor/iis-monitor/g"
 	"github.com/open-falcon/common/model"
 )
 
@@ -48,7 +49,7 @@ func iis_version() (string, error) {
 
 func iisMetrics() (L []*model.MetricValue) {
 	if !g.Config().IIs.Enabled {
-		g.Logger().Println("IIs Monitor is disabled")
+		log.Info("IIs Monitor is disabled")
 		return
 	}
 	websites := g.Config().IIs.Websites
@@ -62,14 +63,14 @@ func iisMetrics() (L []*model.MetricValue) {
 			version := result
 			smartAPI_Push(smartAPI_url, endpoint, version, debug)
 		} else {
-			g.Logger().Println(err, result)
+			log.Info(err, result)
 		}
 	}
 
 	websites = append(websites, "_Total")
 	IIsStat, err := IIsCounters()
 	if err != nil {
-		g.Logger().Println(err)
+		log.Info(err)
 		return
 	}
 	for _, iisStat := range IIsStat {

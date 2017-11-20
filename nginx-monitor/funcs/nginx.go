@@ -4,14 +4,14 @@ import (
 	"bufio"
 	"bytes"
 	"io/ioutil"
-	"log"
+	log "github.com/cihub/seelog"
 	"net/http"
 	"os/exec"
 	"strconv"
 	"strings"
 	"time"
 
-	"github.com/51idc/service-monitor/nginx-monitor/g"
+	"github.com/anchnet/service-monitor/nginx-monitor/g"
 	"github.com/open-falcon/common/model"
 	"github.com/toolkits/file"
 )
@@ -81,7 +81,7 @@ func nginx_status(body string) (NginxStatus, error) {
 	var status NginxStatus
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("Nginx Recovered in Panic", r)
+			log.Info("Nginx Recovered in Panic", r)
 		}
 	}()
 
@@ -112,7 +112,7 @@ func nginx_status(body string) (NginxStatus, error) {
 
 func NginxMetrics() (L []*model.MetricValue) {
 	if !g.Config().Nginx.Enabled {
-		log.Println("Nginx Monitor is disbaled")
+		log.Info("Nginx Monitor is disbaled")
 		return
 	}
 	url := g.Config().Nginx.Staturl
@@ -126,29 +126,29 @@ func NginxMetrics() (L []*model.MetricValue) {
 		if err == nil {
 			smartAPI_Push(smartAPI_url, endpoint, version, debug)
 		} else {
-			log.Println(err)
+			log.Info(err)
 		}
 	}
 
 	uptime, err := pid_uptime(pid)
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 	} else {
 		L = append(L, GaugeValue("Nginx.Uptime", uptime))
 	}
 
 	respbody, resp_code, err := httpGet(url)
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 		return
 	}
 	if resp_code != 200 {
-		log.Println("Http Statu Page Open Error")
+		log.Info("Http Statu Page Open Error")
 		return
 	}
 	stat, err := nginx_status(respbody)
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 		return
 	}
 	L = append(L, GaugeValue("Nginx.ActiveConn", stat.ActiveConn))

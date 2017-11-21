@@ -95,7 +95,7 @@ curl http://127.0.0.1:1990/config
 #### 源码安装
 
 ```
-cd $GOPATH/src/github.com/51idc/service-monitor/tomcat-monitor/
+cd $GOPATH/src/github.com/anchnet/service-monitor/tomcat-monitor/
 go get ./...
 chmod +x control
 ./control build

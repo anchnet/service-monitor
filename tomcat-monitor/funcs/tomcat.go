@@ -3,14 +3,14 @@ package funcs
 import (
 	"encoding/xml"
 	"io/ioutil"
-	"log"
+	log "github.com/cihub/seelog"
 	"net/http"
 	"strings"
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
 
-	"github.com/51idc/service-monitor/tomcat-monitor/g"
+	"github.com/anchnet/service-monitor/tomcat-monitor/g"
 	"github.com/open-falcon/common/model")
 
 type Tomcat struct {
@@ -149,7 +149,7 @@ func xml_struct(body string) (Tomcat, error) {
 
 func TomcatMetrics() (L []*model.MetricValue) {
 	if !g.Config().Tomcat.Enabled {
-		log.Println("Tomcat Monitor is disbaled")
+		log.Info("Tomcat Monitor is disbaled")
 		return
 	}
 	username := g.Config().Tomcat.Username
@@ -167,29 +167,29 @@ func TomcatMetrics() (L []*model.MetricValue) {
 		if err == nil {
 			smartAPI_Push(smartAPI_url, endpoint, version, debug)
 		} else {
-			log.Println(err)
+			log.Info(err)
 		}
 	}
 
 	uptime, err := tomcat_uptime(username, password, statallurl)
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 	} else {
 		L = append(L, GaugeValue("Tomcat.Uptime", uptime))
 	}
 
 	respbody, resp_code, err := TomcathttpGet(username, password, staturl)
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 		return
 	}
 	if resp_code != 200 {
-		log.Println("Http Statu Page Open Error")
+		log.Info("Http Statu Page Open Error")
 		return
 	}
 	stat, err := xml_struct(respbody)
 	if err != nil {
-		log.Println(err)
+		log.Info(err)
 		return
 	}
 	L = append(L, GaugeValue("Tomcat.Jvm.Memory.Free", stat.Jvm.Memory.Free))

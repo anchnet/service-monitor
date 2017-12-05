@@ -3,15 +3,17 @@ package funcs
 import (
 	"encoding/xml"
 	"io/ioutil"
-	log "github.com/cihub/seelog"
 	"net/http"
 	"strings"
 	"time"
 
+	log "github.com/cihub/seelog"
+
 	"github.com/PuerkitoBio/goquery"
 
 	"github.com/anchnet/service-monitor/tomcat-monitor/g"
-	"github.com/open-falcon/common/model")
+	"github.com/open-falcon/common/model"
+)
 
 type Tomcat struct {
 	Jvm       Jvm         `xml:"jvm"`
@@ -139,6 +141,8 @@ func TomcathttpGet(username string, password string, url string) (string, int, e
 }
 
 func xml_struct(body string) (Tomcat, error) {
+	// 兼容部分数据中有-1的xml
+	body = strings.Replace(body, "'-1'", "'0'", -1)
 	var result Tomcat
 	err := xml.Unmarshal([]byte(body), &result)
 	if err != nil {

@@ -5,5 +5,5 @@ import (
 )
 
 func AgentMetrics() []*model.MetricValue {
-	return []*model.MetricValue{GaugeValue("MsSql.Monitor.alive", 1)}
+	return []*model.MetricValue{GaugeValue("MsSQL.Monitor.alive", 1)}
 }

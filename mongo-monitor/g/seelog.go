@@ -11,7 +11,7 @@ func InitSeeLog() {
 		<rollingfile formatid="main" type="size" filename="./var/app.log" maxsize="10485760" maxrolls="10" />
 	    </outputs>
 	    <formats>
-		<format id="main" format="%Date %Time [%LEV] %Msg%n"/>
+		<format id="main" format="%Date %Time [%LEV] %RelFile Line:%Line %Msg%n"/>
 	    </formats>
 	</seelog>
 	`

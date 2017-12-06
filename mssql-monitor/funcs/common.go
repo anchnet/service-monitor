@@ -17,7 +17,7 @@ func NewMetricValue(metric string, val interface{}, dataType string, tags ...str
 
 	if size > 0 {
 		mv.Tags = strings.Join(tags, ",")
-	} else if ("MsSql.Monitor.alive" != metric) {
+	} else if "MsSQL.Monitor.alive" != metric {
 		tags = []string{"instance=_Total"}
 		mv.Tags = strings.Join(tags, ",")
 	}

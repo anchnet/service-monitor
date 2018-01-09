@@ -10,6 +10,11 @@ import (
 	"time"
 )
 
+type DiscoverConfig struct {
+	Url   string `json:"url"`
+	Cycle int    `json:"cycle"`
+}
+
 type PluginConfig struct {
 	Enabled bool   `json:"enabled"`
 	Dir     string `json:"dir"`
@@ -45,6 +50,7 @@ type GlobalConfig struct {
 	Debug         bool             `json:"debug"`
 	Hostname      string           `json:"hostname"`
 	IP            string           `json:"ip"`
+	Discover      *DiscoverConfig  `json:"discover"`
 	Plugin        *PluginConfig    `json:"plugin"`
 	Heartbeat     *HeartbeatConfig `json:"heartbeat"`
 	Transfer      *TransferConfig  `json:"transfer"`
@@ -52,9 +58,9 @@ type GlobalConfig struct {
 	SmartAPI      string           `json:"smartapi"`
 	Collector     *CollectorConfig `json:"collector"`
 	IgnoreMetrics map[string]bool  `json:"ignore"`
-	Port          []string           `json:"port"`
-	DialTimeout   time.Duration  `json:"dialTimeOut"`
-	Process       map[string]bool `json:"process"`
+	Port          []string          `json:"port"`
+	DialTimeout   time.Duration     `json:"dialTimeOut"`
+	Process       map[string]bool  `json:"process"`
 }
 
 var (

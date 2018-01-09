@@ -25,7 +25,7 @@ func ServiceDiscover() {
 		} else {
 			log.Info("discover service fail")
 		}
-		time.Sleep(g.Config().Discover.Cycle * time.Second)
+		time.Sleep(time.Duration(g.Config().Discover.Cycle) * time.Second)
 	}
 }
 

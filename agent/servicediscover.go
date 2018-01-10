@@ -23,7 +23,7 @@ func ServiceDiscover() {
 		if err := reportServiceDiscover(); err == nil {
 			log.Info("discover service success")
 		} else {
-			log.Info("discover service fail")
+			log.Error("discover service fail")
 		}
 		time.Sleep(time.Duration(g.Config().Discover.Cycle) * time.Second)
 	}
@@ -32,7 +32,7 @@ func ServiceDiscover() {
 func reportServiceDiscover() error {
 	hostname, err := g.Hostname()
 	if err != nil {
-		log.Info(err)
+		log.Error(err)
 		hostname = ""
 	}
 	serviceMap := getServicePortList()

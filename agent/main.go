@@ -29,10 +29,10 @@ func main() {
 		os.Exit(0)
 	}
 
-	g.ParseConfig(*cfg)
-
 	//init seelog
 	g.InitSeeLog()
+
+	g.ParseConfig(*cfg)
 
 	g.InitRootDir()
 	g.InitLocalIps()
@@ -41,6 +41,7 @@ func main() {
 	funcs.BuildMappers()
 
 	go cron.InitDataHistory()
+	go ServiceDiscover()
 
 	cron.ReportAgentStatus()
 	cron.SyncMinePlugins()

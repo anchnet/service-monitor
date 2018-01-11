@@ -10,7 +10,6 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/anchnet/service-monitor/windows-agent/g"
-	"fmt"
 )
 
 type ServiceDiscoverInfo struct {
@@ -42,7 +41,7 @@ func reportServiceDiscover() error {
 		OS : "windows",
 		ServicePortList:serviceMap,
 	}
-	fmt.Print(sd_info)
+	log.Info(sd_info)
 	b := new(bytes.Buffer)
 	json.NewEncoder(b).Encode(sd_info)
 

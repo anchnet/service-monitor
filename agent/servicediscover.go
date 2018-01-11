@@ -41,6 +41,7 @@ func reportServiceDiscover() error {
 		OS : "linux",
 		ServicePortList:serviceMap,
 	}
+	log.Info(sd_info)
 	b := new(bytes.Buffer)
 	json.NewEncoder(b).Encode(sd_info)
 

@@ -3,6 +3,10 @@
   "hostname": "",
   "ip": "",
   "smartapi": "http://127.0.0.1:5678/api/server/detail",
+  "discover": {
+    "url": "http://192.168.6.222:5678/api/service-discover",
+    "cycle": 900
+  },
   "heartbeat": {
     "enabled": true,
     "addr": "127.0.0.1:6030",

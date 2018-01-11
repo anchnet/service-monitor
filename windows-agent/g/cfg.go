@@ -18,6 +18,11 @@ type PluginConfig struct {
 	Args    string `json:"args"`
 }
 
+type DiscoverConfig struct {
+	Url   string `json:"url"`
+	Cycle int    `json:"cycle"`
+}
+
 type HeartbeatConfig struct {
 	Enabled  bool   `json:"enabled"`
 	Addr     string `json:"addr"`
@@ -36,6 +41,7 @@ type GlobalConfig struct {
 	Debug         bool             `json:"debug"`
 	Hostname      string           `json:"hostname"`
 	IP            string           `json:"ip"`
+	Discover      *DiscoverConfig  `json:"discover"`
 	SmartAPI      string           `json:"smartapi"`
 	Heartbeat     *HeartbeatConfig `json:"heartbeat"`
 	Transfer      *TransferConfig  `json:"transfer"`
